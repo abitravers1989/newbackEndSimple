@@ -18,3 +18,10 @@ try {
     console.log(err, 'fatel error occured');
     process.exit(1);
 }
+
+container.register({
+    app: asFunction(express),
+    server: asFunction(server).singleton(),
+})
+
+module.exports = container.cradle;
