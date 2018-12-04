@@ -22,6 +22,7 @@ try {
 container.register({
     app: asFunction(express),
     server: asFunction(server).singleton(),
+    envVariables: asValue(envVariables),
 })
 
 module.exports = container.cradle;
