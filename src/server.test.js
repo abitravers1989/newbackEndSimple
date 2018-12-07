@@ -7,17 +7,16 @@ describe('Server', () => {
         app: {
             listen: sandbox.stub(),
             on: sandbox.stub(),
-            emit: () => {},
-        },
-        logger: {
-            info: () => {},
-            error: () => {},
         },
         envVariables: {
             PORT: 3000,
+            NODE_ENV: 'dev',
         },
-        process: {
-            exit: () => {}
+        morgan: {
+            'dev': ()=>{}
+        },
+        logger: {
+            fatal: () => {}
         }
     }
 
@@ -25,39 +24,45 @@ describe('Server', () => {
 
     const { app } = dependencies;
 
+    beforeEach(() => {
+        sandbox.stub(process, 'exit')
+    })
+
     afterEach(() => sandbox.reset());
 
-    afterAll(() => sandbox.restore());
+    //afterAll(() => sandbox.restore());
 
     describe('start', () => {
-        it('starts up the express server', () => {
-            const app =  {
-                listen: sandbox.stub(),
-                on: sandbox.stub(),
-                emit: () => {},
-            }
-
-            const mockExpressServer = () => {
-                return () => {
-                    return app
-                }
-            }
-
-            server.start();
-            expect(app.listen).to.have.been.called
+       // let actualServer;
+        const mockExpress = {
+          address: () => ({
+            PORT: dependencies.envVariables.PORT,
+          }),
+        };
+    
+        beforeEach(() => {
+          app.listen.returns(mockExpress);
+          console.log('app.listen', app.listen)
+          server.start();
+          console.log('actualServer:  ', server)
+          //app.listen.yield();
         });
-        it('emits a listened event', () => {
+        fit('starts up the express server', () => {
+            //server.start();
+            console.log("app is!!!!", app.listen)
+            expect(app.listen).to.have.been.calledWith(dependencies.envVariables.PORT);
+        });
+ 
+        it('Logs the port which the server has been started on', () => {
 
         });
-        it('prints to the console when it hears that event', () => {
-
-        });
-        describe('throws an error if something went wrong', () => {
-            it('loggs the error', () => {
-
-            })
-            it('shuts down gracefully', () => {
+        describe('when the server creation fails', () => {    
+            it('shuts down the server', () => {
+                app.listen.throws();
+                server.start()
                 
+                // have to mock it out 
+                //expect(process.exit).to.have.been.calledWith(1)
             })
         })
     })
