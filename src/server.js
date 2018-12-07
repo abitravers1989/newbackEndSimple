@@ -24,7 +24,7 @@ module.exports = ({ app, envVariables, morgan, logger }) => {
                 logger.fatal(err, 'Failed to start server')
                 process.exit(1)
             }
-            return server;
+            return server, app;
         }
     }
 }
