@@ -1,9 +1,11 @@
 const { createContainer, asFunction, asValue } = require('awilix');
 const express = require('express');
-const logger = require('morgan');
+const morgan = require('morgan');
+const winston = require('winston');
 
 const getEnvVar = require('./getEnvVar');
 const server = require('./server');
+const logger = require('./utils/logger')
 
 const container = createContainer();
 
@@ -24,7 +26,8 @@ container.register({
     app: asFunction(express),
     server: asFunction(server).singleton(),
     envVariables: asValue(envVariables),
-    logger: asFunction(logger),
+    morgan: asValue(morgan),
+    logger: asValue(winston),
 })
 
 module.exports = container.cradle;
