@@ -1,7 +1,7 @@
 const serverFactory = require('./server');
 const sinon = require('sinon')
 
-describe('Server', () => {
+describe('server', () => {
   const sandbox = sinon.createSandbox();
   const dependencies = {
     app: {
@@ -29,35 +29,40 @@ describe('Server', () => {
   afterEach(() => sandbox.reset());
 
   describe('start', () => {
-    fit('starts up the express server', () => {
-      const mockExpress = {
-        address: () => ({
-          PORT: dependencies.envVariables.PORT,
-        }),
-      };
+    const mockExpress = {
+      address: () => ({
+        PORT: dependencies.envVariables.PORT,
+      }),
+    };
+
+    beforeEach(() => {
+      console.log('app.listen0', app.listen)
       app.listen.returns(mockExpress);
+      console.log('app.listen1', app.listen)
       server.start();
       app.listen.yield();
+      console.log('app.listen2', app.listen)
+    })
 
-      const actualServer= server.start();
-      console.log('actualServer', actualServer)
-
-            // console.log("app is!!!!", dependencies.app)
-            //expect(dependencies.app.listen).to.have.been.called
-            //With(dependencies.envVariables.PORT);
+    it('starts up the express server', () => {
+      console.log('app.listen3', app.listen)
+      expect().to.have.been.called()
+      console.log('app.listen4', app.listen)
+      
+      //expect(app.listen).to.have.been.calledWith(dependencies.envVariables.PORT);
      });
  
-     it('Logs the port which the server has been started on', () => {
+    //  it('Logs the port which the server has been started on', () => {
 
-     });
-     describe('when the server creation fails', () => {    
-       it('shuts down the server', () => {
-         app.listen.throws();
-         server.start()
+    //  });
+    //  describe('when the server creation fails', () => {    
+    //    it('shuts down the server', () => {
+    //      app.listen.throws();
+    //      server.start()
                 
-                // have to mock it out 
-                //expect(process.exit).to.have.been.calledWith(1)
-        })
-     })
+    //             // have to mock it out 
+    //             //expect(process.exit).to.have.been.calledWith(1)
+    //     })
+    //  })
   })
 })
