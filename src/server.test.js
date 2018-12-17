@@ -19,8 +19,8 @@ describe('server', () => {
      },
      morgan: ()=>{},
      logger: {
-       info: () => {},
-       fatal: () => {},
+       info: sandbox.stub(),
+       fatal: sandbox.stub(),
      },
      promisify,
     };
@@ -62,31 +62,41 @@ describe('server', () => {
       actualServer = server.start();
       app.listen.yield(); 
       expect(actualServer).to.equal(mockExpress);
+      expect(dependencies.logger.info).to.have.been.called;
      });
 
      describe('when server creation fails', () => {
        it('exits the process and shuts down', () => {
-        // sandbox.reset();
-        // sandbox.stub(process, 'exit');
         app.listen.throws();
         server.start();
         expect(process.exit).to.have.been.calledWith(1);
+        expect(dependencies.logger.fatal).to.have.been.called;
        })
      });
   });
 
   describe('stop()', () => {
+    const mockExpress = {
+      close: sinon.stub().yields(null),
+    }; 
     describe('when the server can be closed successfully', () => {
-      it('closes the server', () => {
-        const mockExpress = {
-          close: sinon.stub().yields(null),
-        };
-        
+      it('closes the server', async () => {
         app.listen.returns(mockExpress);
         server.start();
-        server.stop();
+        await server.stop();
         expect(mockExpress.close).to.have.been.called;
+        expect(dependencies.logger.info).to.have.been.called;
       })
+    });
+    describe('when the server cannot be closes successfully', () => {
+      it('exits the process', async () => {
+        const error = new Error('error');
+        mockExpress.close.yields(error);
+        server.start();
+        await server.stop();
+        expect(process.exit).to.have.been.calledWith(1);
+        expect(dependencies.logger.fatal).to.have.been.called;
+      });
     })
   });
 })
