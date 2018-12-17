@@ -37,6 +37,4 @@ module.exports = ({ app, envVariables, morgan, logger, promisify }) => {
 }
 
 
-//HAVING PROBLEMS WITHY THE LOGGER
-
 
