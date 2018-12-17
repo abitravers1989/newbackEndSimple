@@ -43,7 +43,7 @@ describe('server', () => {
         PORT: dependencies.envVariables.PORT,
       }),
     };
-//Before hooks not working mocha and chai   !!!!!!!!!
+//Before hooks not working mocha and chai
     it('starts up the express server on the coprrect port', () => {
       app.listen.returns(mockExpress);
       let actualServer;
@@ -60,6 +60,42 @@ describe('server', () => {
       expect(actualServer).to.equal(mockExpress);
       expect(dependencies.logger.info).to.have.been.called;
      });
+
+     describe('health endpoints', () => {
+       it('sets the correct routes', () => {
+        const mockExpress = {
+          address: () => ({
+            PORT: dependencies.envVariables.PORT,
+          }),
+        };
+         app.listen.returns(mockExpress);
+         actualServer = server.start();
+         app.listen.yield();
+
+         const expectedRoutes = ['/private/readiness', '/private/liveness'];
+         expect(app.get).to.have.been.calledWith(expectedRoutes);
+       });
+       it('sends a 200 response with "ping png" json payload', () => {
+        const mockExpress = {
+          address: () => ({
+            PORT: dependencies.envVariables.PORT,
+          }),
+        };
+         app.listen.returns(mockExpress);
+         actualServer = server.start();
+         app.listen.yield();
+
+         const returned = {
+           res: () => ({
+             status: 200,
+             json: { ping: 'pong' },
+           })
+         }
+         app.get.returns(returned);
+         app.get.yield();
+         expect(dependencies.app.get)   
+       });
+     })
 
      describe('when server creation fails', () => {
        it('exits the process and shuts down', () => {
