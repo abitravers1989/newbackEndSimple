@@ -60,6 +60,15 @@ describe('server', () => {
       app.listen.yield(); 
       expect(actualServer).to.equal(mockExpress);
      });
+
+     describe('when server creation fails', () => {
+       it('exits the process', () => {
+        sandbox.stub(process, 'exit');
+         app.listen.throws();
+         server.start();
+         expect(process.exit).to.have.been.calledWith(1);
+       })
+     })
      
  
     //  it('Logs the port which the server has been started on', () => {
