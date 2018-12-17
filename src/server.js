@@ -1,4 +1,4 @@
-module.exports = ({ app, envVariables, morgan, logger }) => {
+module.exports = ({ app, envVariables, morgan, logger, promisify }) => {
     let server;
     return {
         start: () => {
@@ -23,7 +23,16 @@ module.exports = ({ app, envVariables, morgan, logger }) => {
                 process.exit(1)
             }
             return server;
-        }
+        },
+        stop: async () => {
+            try {
+                await promisify(server.close).call(server);
+                logger.info('Shutting down the server successfully')
+            } catch (err) {
+                logger.fatal({err}, 'Forcing server to shut down');
+                process.exit(1);
+            }
+        },
     }
 }
 

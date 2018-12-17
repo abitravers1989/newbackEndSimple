@@ -5,7 +5,7 @@ const winston = require('winston');
 
 const getEnvVar = require('./getEnvVar');
 const server = require('./server');
-const logger = require('./utils/logger')
+const { promisify } = require('util');
 
 const container = createContainer();
 
@@ -24,10 +24,11 @@ try {
 
 container.register({
     app: asFunction(express),
-    server: asFunction(server).singleton(),
     envVariables: asValue(envVariables),
     morgan: asValue(morgan),
     logger: asValue(winston),
+    promisify: asValue(promisify),
+    server: asFunction(server).singleton(),
 })
 
 module.exports = container.cradle;
