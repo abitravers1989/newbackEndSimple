@@ -1,5 +1,9 @@
 const serverFactory = require('./server');
-const sinon = require('sinon')
+const chai = require('chai');
+const sinon = require('sinon');
+
+const { expect } = chai;
+chai.use(require('sinon-chai'));
 
 describe('server', () => {
   const sandbox = sinon.createSandbox();
@@ -20,15 +24,15 @@ describe('server', () => {
     };
 
   const server = serverFactory(dependencies);
-
   const { app } = dependencies;
 
-  beforeEach(() => {
+  before(() => {
     sandbox.stub(process, 'exit')
   })
-  afterEach(() => sandbox.reset());
+  after(() => sandbox.reset());
 
   describe('start', () => {
+    let actualServer;
     const mockExpress = {
       address: () => ({
         PORT: dependencies.envVariables.PORT,
@@ -39,7 +43,7 @@ describe('server', () => {
       console.log('app.listen0', app.listen)
       app.listen.returns(mockExpress);
       console.log('app.listen1', app.listen)
-      server.start();
+      actualServer = server.start();
       app.listen.yield();
       console.log('app.listen2', app.listen)
     })
