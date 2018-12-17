@@ -12,6 +12,7 @@ describe('server', () => {
     app: {
       listen: sandbox.stub(),
       use: sandbox.stub(),
+      get: sandbox.stub(),
      },
      envVariables: {
        PORT: 3000,
@@ -20,9 +21,11 @@ describe('server', () => {
      morgan: ()=>{},
      logger: {
        info: sandbox.stub(),
-       fatal: sandbox.stub(),
+       error: sandbox.stub(),
      },
      promisify,
+    //  healthEndpoint: () => {},
+    //  bodyParser: () => {}
     };
 
   const server = serverFactory(dependencies);
@@ -41,14 +44,7 @@ describe('server', () => {
       }),
     };
 //Before hooks not working mocha and chai   !!!!!!!!!
-    // before(() => {
-    //   app.listen.returns(mockExpress);
-    //   let actualServer;
-    //   actualServer = server.start();
-    //   app.listen.yield(); 
-    // })
     it('starts up the express server on the coprrect port', () => {
-      //sandbox.reset();
       app.listen.returns(mockExpress);
       let actualServer;
       actualServer = server.start();
@@ -70,7 +66,7 @@ describe('server', () => {
         app.listen.throws();
         server.start();
         expect(process.exit).to.have.been.calledWith(1);
-        expect(dependencies.logger.fatal).to.have.been.called;
+        expect(dependencies.logger.error).to.have.been.called;
        })
      });
   });
@@ -95,7 +91,7 @@ describe('server', () => {
         server.start();
         await server.stop();
         expect(process.exit).to.have.been.calledWith(1);
-        expect(dependencies.logger.fatal).to.have.been.called;
+        expect(dependencies.logger.error).to.have.been.called;
       });
     })
   });

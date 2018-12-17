@@ -15,9 +15,9 @@ module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint
                     }, stream: process.stdout
                 }));
 
-                app.use(bodyParser.json());
+              // app.use(bodyParser.json());
 
-                app.use('/', healthEndpoint);
+                //app.use('/', healthEndpoint.readiness);
                 app.get(['/private/readiness', '/private/liveness'], (req, res) =>
                     res.status(200).json({ ping: 'pong' }),
                 );
@@ -31,7 +31,7 @@ module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint
                     //console.log((`listening on port ${server.address().port}`))
                 }); 
             } catch (err) {
-                logger.fatal(err, 'Failed to start server')
+                logger.error(err, 'Failed to start server')
                 process.exit(1)
             }
             return server;
@@ -41,7 +41,7 @@ module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint
                 await promisify(server.close).call(server);
                 logger.info('Shutting down the server successfully')
             } catch (err) {
-                logger.fatal({err}, 'Forcing server to shut down');
+                logger.error({err}, 'Forcing server to shut down');
                 process.exit(1);
             }
         },
