@@ -26,34 +26,27 @@ describe('server', () => {
   const server = serverFactory(dependencies);
   const { app } = dependencies;
 
-  before(() => {
-    sandbox.stub(process, 'exit')
-  })
-  after(() => sandbox.reset());
+  // beforeEach(() => {
+  //   sandbox.stub(process, 'exit')
+  // })
+  afterEach(() => sandbox.reset());
 
   describe('start', () => {
-    let actualServer;
-    const mockExpress = {
-      address: () => ({
-        PORT: dependencies.envVariables.PORT,
-      }),
-    };
-
-    beforeEach(() => {
-      console.log('app.listen0', app.listen)
-      app.listen.returns(mockExpress);
-      console.log('app.listen1', app.listen)
-      actualServer = server.start();
-      app.listen.yield();
-      console.log('app.listen2', app.listen)
-    })
-
     it('starts up the express server', () => {
-      console.log('app.listen3', app.listen)
-      expect().to.have.been.called()
-      console.log('app.listen4', app.listen)
-      
-      //expect(app.listen).to.have.been.calledWith(dependencies.envVariables.PORT);
+      sandbox.reset();
+      // sandbox.stub(process, 'exit');
+      const mockExpress = {
+        address: () => ({
+          PORT: dependencies.envVariables.PORT,
+        }),
+      };
+
+      app.listen.returns(mockExpress);
+      let actualServer;
+      actualServer = server.start();
+      app.listen.yield(); 
+      expect(app.listen).to.have.been.calledWith(dependencies.envVariables.PORT);
+    
      });
  
     //  it('Logs the port which the server has been started on', () => {
