@@ -1,3 +1,3 @@
 const { server } = require('./container')
 
-server.start()
+server.start();

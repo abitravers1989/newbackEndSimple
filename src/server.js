@@ -1,4 +1,4 @@
-module.exports = ({ app, envVariables, morgan, logger, promisify }) => {
+module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint, bodyParser }) => {
     let server;
     return {
         start: () => {
@@ -14,6 +14,18 @@ module.exports = ({ app, envVariables, morgan, logger, promisify }) => {
                         return res.statusCode >= 400
                     }, stream: process.stdout
                 }));
+
+                app.use(bodyParser.json());
+
+                app.use('/', healthEndpoint);
+                app.get(['/private/readiness', '/private/liveness'], (req, res) =>
+                    res.status(200).json({ ping: 'pong' }),
+                );
+
+                app.get('*', (req, res) => {
+                    res.render('error')
+                })
+
                 server = app.listen(envVariables.PORT, () => {
                     logger.info(`listening on port ${server.address().port}`)
                     //console.log((`listening on port ${server.address().port}`))
