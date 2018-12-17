@@ -32,22 +32,35 @@ describe('server', () => {
   afterEach(() => sandbox.reset());
 
   describe('start', () => {
-    it('starts up the express server', () => {
+    const mockExpress = {
+      address: () => ({
+        PORT: dependencies.envVariables.PORT,
+      }),
+    };
+//Before hooks not working mocha and chai   !!!!!!!!!
+    // before(() => {
+    //   app.listen.returns(mockExpress);
+    //   let actualServer;
+    //   actualServer = server.start();
+    //   app.listen.yield(); 
+    // })
+    it('starts up the express server on the coprrect port', () => {
       sandbox.reset();
-      // sandbox.stub(process, 'exit');
-      const mockExpress = {
-        address: () => ({
-          PORT: dependencies.envVariables.PORT,
-        }),
-      };
-
       app.listen.returns(mockExpress);
       let actualServer;
       actualServer = server.start();
       app.listen.yield(); 
-      expect(app.listen).to.have.been.calledWith(dependencies.envVariables.PORT);
-    
+      expect(app.listen).to.have.been.calledWith(dependencies.envVariables.PORT);   
      });
+
+     it('returns a server object', () => {
+      app.listen.returns(mockExpress);
+      let actualServer;
+      actualServer = server.start();
+      app.listen.yield(); 
+      expect(actualServer).to.equal(mockExpress);
+     });
+     
  
     //  it('Logs the port which the server has been started on', () => {
 
