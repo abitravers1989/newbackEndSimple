@@ -15,14 +15,17 @@ describe('articlesSchemaModel', () => {
         it('contains all the expect fields', () => {
             const expectedField = ['id', 'title', 'body', 'author', 'timestamp'];
 
-            expect(articlesSchemaModel(dependencies).ArticlesSchema).to.have.all.keys(expectedField)
+            const body = 'A post on how to TDD an express app with dependency injection and a mongo DB'
+            let articleInsance = new articlesSchemaModel({ title: 'Create an Express add with mongoDB', body, author: 'abi'})
+
+            expect(articleInsance).to.have.all.keys(expectedField)
             //console.log(articlesSchemaModel.ArticlesSchema);
         });
         it('is a model object', () => {
             const { model } = mongoose
             const expectedField = ['id', 'title', 'body', 'author', 'timestamp'];
 
-            expect(articlesSchemaModel(dependencies)).to.be.an.instanceOf(model)
+            //expect(articlesSchemaModel(dependencies)).to.be.an.instanceOf(model)
             //console.log(articlesSchemaModel.ArticlesSchema);
         })
     })
