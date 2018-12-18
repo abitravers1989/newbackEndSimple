@@ -33,7 +33,6 @@ module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint
 
                 server = app.listen(envVariables.PORT, () => {
                     logger.info(`listening on port ${server.address().port}`)
-                    //console.log((`listening on port ${server.address().port}`))
                 }); 
             } catch (err) {
                 logger.error(err, 'Failed to start server')
@@ -48,10 +47,10 @@ module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint
             } catch (err) {
                 logger.error({err}, 'Forcing server to shut down');
                 process.exit(1);
-            }
+            };
         },
-    }
-}
+    };
+};
 
 
 

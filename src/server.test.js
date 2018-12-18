@@ -1,10 +1,11 @@
-const serverFactory = require('./server');
 const chai = require('chai');
 const sinon = require('sinon');
-const { promisify } = require('util');
 
 const { expect } = chai;
 chai.use(require('sinon-chai'));
+
+const serverFactory = require('./server');
+const { promisify } = require('util');
 
 describe('server', () => {
   const sandbox = sinon.createSandbox();
