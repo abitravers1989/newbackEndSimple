@@ -32,7 +32,7 @@ container.register({
     logger: asValue(winston),
     promisify: asValue(promisify),
     server: asFunction(server).singleton(),
-    healthEndpoint: asValue(healthEndpoint),
+    healthEndpoint: asFunction(healthEndpoint),
     router: asFunction(router),
     bodyParser: asValue(bodyParser)
 })

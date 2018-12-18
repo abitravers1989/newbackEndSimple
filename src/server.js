@@ -15,9 +15,14 @@ module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint
                     }, stream: process.stdout
                 }));
 
-              // app.use(bodyParser.json());
+                //app.use(bodyParser.json());
 
-                //app.use('/', healthEndpoint.readiness);
+                //http://localhost:3000/api/readiness
+                app.use('/api/readiness', healthEndpoint.readiness);
+
+                //http://localhost:3000/api/liveness
+                app.use('/api/liveness', healthEndpoint.liveness);
+
                 app.get(['/private/readiness', '/private/liveness'], (req, res) =>
                     res.status(200).json({ ping: 'pong' }),
                 );
