@@ -7,7 +7,7 @@ chai.use(require('sinon-chai'));
 const healthEndpoints = require('./heath');
 
 describe('healthEndpoints', () => {
-    describe.only('readiness', () => {
+    describe('readiness', () => {
         it('sends a 200 response with "ping png" json payload', () => {
             let req = {};
             let res = {
@@ -15,10 +15,11 @@ describe('healthEndpoints', () => {
                     json: sinon.stub(),
                 })
             };
-
-            healthEndpoints().readiness(req, res)
+            healthEndpoints().readiness(req, res);
+            expect(res.status).to.have.been.calledWith(200);
+            expect(res.status().json.firstCall.args[0]).to.deep.equal({ ping: 'pong' })
         });
-        it('works', () => {
+        it('sends a response with "hi" in the payload', () => {
             let req = {};
             let res = {
                 send: sinon.spy()
