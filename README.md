@@ -1,8 +1,13 @@
-# To Run 
+## To Run 
 
 `npm run start`
 
-# Configuration
+## To Test 
+
+`npm run test:unit`
+`npm run test:unit:watch`
+
+# #Configuration
 
 All configuration is done using environment variables, the following are required:
 
