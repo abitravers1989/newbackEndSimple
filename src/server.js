@@ -1,4 +1,4 @@
-module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint, mongoose, bodyParser }) => {
+module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint, mongoose, articlesSchema, bodyParser }) => {
     let server;
     return {
         start: () => {
@@ -15,6 +15,8 @@ module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint
                     }, stream: process.stdout
                 }));
 
+                ///!!!!!!! need to refactor these to index.js !!!!!
+
                 //app.use(bodyParser.json());
 
                 //http://localhost:3000/api/readiness
@@ -30,6 +32,10 @@ module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint
                 app.get('*', (req, res) => {
                     res.render('error')
                 })
+
+                app.post('/api/addarticle', articlesSchema.create)
+
+                ///!!!!!!! need to refactor these to index.js !!!!!
 
                 //add database
 

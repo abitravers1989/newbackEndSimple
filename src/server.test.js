@@ -14,6 +14,7 @@ describe('server', () => {
       listen: sandbox.stub(),
       use: sandbox.stub(),
       get: sandbox.stub(),
+      post: () => {},
      },
      envVariables: {
        PORT: 3000,
@@ -30,6 +31,9 @@ describe('server', () => {
        connect: () => {},
        set: () => {},
      },
+     articlesSchema: {
+       create: () => {},
+     }
     //  bodyParser: () => {}
     };
 
