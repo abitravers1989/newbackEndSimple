@@ -17,6 +17,14 @@ describe('healthEndpoints', () => {
             };
 
             healthEndpoints.readiness(req, res)
+        });
+        it.only('works', () => {
+            let req = {};
+            let res = {
+                send: () => {}
+            }
+            console.log('healthEndpoints', healthEndpoints)
+            healthEndpoints().basic(req, res)
         })
     })
 });
