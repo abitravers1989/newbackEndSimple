@@ -38,7 +38,7 @@ container.register({
     router: asFunction(router),
     mongoose: asFunction(() => mongoose).singleton(),
     bodyParser: asValue(bodyParser),
-    articlesSchema: asValue(articlesSchema).singleton(),
+    articlesSchema: asValue(articlesSchema),
 })
 
 module.exports = container.cradle;

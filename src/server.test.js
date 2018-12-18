@@ -26,6 +26,10 @@ describe('server', () => {
      },
      promisify,
      healthEndpoint: () => {},
+     mongoose: {
+       connect: () => {},
+       set: () => {},
+     },
     //  bodyParser: () => {}
     };
 
@@ -90,12 +94,14 @@ describe('server', () => {
           status: sinon.stub().returns({
             json: sinon.stub(),
           }),
+          render: () => {}
         };
 
         // app.get.firstCall.yield(['/private/readiness', '/private/liveness'], undefined)
+        //app.get.yields(resMock)
         app.get.lastCall.yield(undefined, resMock);
         expect(resMock.status).to.have.been.calledWith(200);
-        expect(resMock.status().json).to.have.been.calledWith({ ping: 'pong' });
+        expect(resMock.status().json.firstCall.args[0]).to.deep.equal({ ping: 'pong' })
         });
      })
 

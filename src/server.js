@@ -1,4 +1,4 @@
-module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint, bodyParser }) => {
+module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint, mongoose, bodyParser }) => {
     let server;
     return {
         start: () => {
@@ -30,6 +30,11 @@ module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint
                 app.get('*', (req, res) => {
                     res.render('error')
                 })
+
+                //add database
+
+                mongoose.connect('mongodb://localhost/blogSite');
+                mongoose.set('debug', true);
 
                 server = app.listen(envVariables.PORT, () => {
                     logger.info(`listening on port ${server.address().port}`)

@@ -11,7 +11,7 @@ describe('articlesSchemaModel', () => {
     const dependencies = {
         mongoose,
     }
-    describe.only('articlesSchema', () => {
+    describe('articlesSchema', () => {
         it('contains all the expect fields', () => {
             const expectedField = ['id', 'title', 'body', 'author', 'timestamp'];
 
