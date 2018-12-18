@@ -44,7 +44,7 @@ describe('server', () => {
         PORT: dependencies.envVariables.PORT,
       }),
     };
-//Before hooks not working mocha and chai
+//Before hooks not working chai
     it('starts up the express server on the coprrect port', () => {
       app.listen.returns(mockExpress);
       let actualServer;
@@ -122,6 +122,7 @@ describe('server', () => {
         expect(dependencies.logger.info).to.have.been.called;
       })
     });
+
     describe('when the server cannot be closes successfully', () => {
       it('exits the process', async () => {
         const error = new Error('error');
