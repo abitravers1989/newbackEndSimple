@@ -6,7 +6,7 @@ chai.use(require('sinon-chai'));
 
 const getEnvVar = require('./getEnvVar');
 
-describe.only('getEnvVar', () => {
+describe('getEnvVar', () => {
     describe('when the requested env variable is found', () => {
         it('returns the value', () => {
             const MOCK_ENV_VARIABLE = 'MOCK_ENV_VARIABLE';
