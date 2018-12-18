@@ -5,10 +5,12 @@ const winston = require('winston');
 const { promisify } = require('util');
 const router = express.Router();
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const getEnvVar = require('./getEnvVar');
 const server = require('./server');
-const healthEndpoint = require('./routes/heath')
+const healthEndpoint = require('./routes/heath');
+const articlesSchema = require('./models/articles')
 
 const container = createContainer();
 
@@ -34,7 +36,9 @@ container.register({
     server: asFunction(server).singleton(),
     healthEndpoint: asFunction(healthEndpoint),
     router: asFunction(router),
-    bodyParser: asValue(bodyParser)
+    mongoose: asFunction(() => mongoose).singleton(),
+    bodyParser: asValue(bodyParser),
+    articlesSchema: asValue(articlesSchema).singleton(),
 })
 
 module.exports = container.cradle;
