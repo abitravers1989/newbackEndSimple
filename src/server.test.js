@@ -25,7 +25,7 @@ describe('server', () => {
        error: sandbox.stub(),
      },
      promisify,
-    //  healthEndpoint: () => {},
+     healthEndpoint: () => {},
     //  bodyParser: () => {}
     };
 
