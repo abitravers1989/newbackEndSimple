@@ -19,15 +19,18 @@ describe('healthEndpoints', () => {
             expect(res.status).to.have.been.calledWith(200);
             expect(res.status().json.firstCall.args[0]).to.deep.equal({ ping: 'pong' })
         });
-        it('sends a response with "hi" in the payload', () => {
+    });
+    describe('liveness', () => {
+        it('sends a 200 response with "ping png" json payload', () => {
             let req = {};
             let res = {
-                send: sinon.spy()
-            }
-           
-            healthEndpoints().basic(req, res);
-            expect(res.send).to.have.been.calledOnce;
-            expect(res.send.firstCall.args[0]).to.equal('hi')
+                status: sinon.stub().returns({
+                    json: sinon.stub(),
+                })
+            };
+            healthEndpoints().liveness(req, res);
+            expect(res.status).to.have.been.calledWith(200);
+            expect(res.status().json.firstCall.args[0]).to.deep.equal({ ping: 'pong' })
         });
-    })
+    });
 });
