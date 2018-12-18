@@ -22,6 +22,8 @@ After running it locally the following endpoints will be exposed:
 - http://localhost:3000/private/readiness
 - http://localhost:3000/private/liveness
 
+## Resources Used
+
 https://blog.cloudboost.io/learn-how-to-create-a-simple-blog-with-react-node-c05fa6889de3
 
 For testing: https://scotch.io/tutorials/how-to-test-nodejs-apps-using-mocha-chai-and-sinonjs
