@@ -85,16 +85,17 @@ describe('server', () => {
          actualServer = server.start();
          app.listen.yield();
 
-         const returned = {
-           res: () => ({
-             status: 200,
-             json: { ping: 'pong' },
-           })
-         }
-         app.get.returns(returned);
-         app.get.yield();
-         expect(dependencies.app.get)   
-       });
+         const resMock = {
+          status: sinon.stub().returns({
+            json: sinon.stub(),
+          }),
+        };
+
+        // app.get.firstCall.yield(['/private/readiness', '/private/liveness'], undefined)
+        app.get.lastCall.yield(undefined, resMock);
+        expect(resMock.status).to.have.been.calledWith(200);
+        expect(resMock.status().json).to.have.been.calledWith({ ping: 'pong' });
+        });
      })
 
      describe('when server creation fails', () => {
