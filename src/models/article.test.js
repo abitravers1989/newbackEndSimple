@@ -15,7 +15,7 @@ describe('articlesSchemaModel', () => {
         it('contains all the expect fields', () => {
             const expectedField = ['id', 'title', 'body', 'author', 'timestamp'];
 
-            const body = 'A post on how to TDD an express app with dependency injection and a mongo DB'
+            const body = 'A post on how to TDD an express app with dependency injection and a mongo DB';
             let articleInsance = new articlesSchemaModel({ title: 'Create an Express add with mongoDB', body, author: 'abi'})
 
             expect(articleInsance).to.have.all.keys(expectedField)
@@ -30,3 +30,5 @@ describe('articlesSchemaModel', () => {
         })
     })
 })
+
+// { title: 'Create an Express add with mongoDB', body: 'A post on how to TDD an express app with dependency injection and a mongo DB', author: 'abi'}

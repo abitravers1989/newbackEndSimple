@@ -1,16 +1,17 @@
-const { createContainer, asFunction, asValue,  asClass} = require('awilix');
+const { createContainer, asFunction, asValue} = require('awilix');
 const express = require('express');
 const morgan = require('morgan');
 const winston = require('winston');
 const { promisify } = require('util');
-const router = express.Router();
+//const router = express.Router();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const getEnvVar = require('./getEnvVar');
+const getEnvVar = require('./utils/getEnvVar');
 const server = require('./server');
-const healthEndpoint = require('./routes/heath');
-const articlesSchema = require('./models/articles')
+const healthEndpoint = require('./rest/routes/heath');
+const articlesSchema = require('./models/articles');
+const articleEndpoint = require('./rest/routes/articles');
 
 const container = createContainer();
 
@@ -35,10 +36,11 @@ container.register({
     promisify: asValue(promisify),
     server: asFunction(server).singleton(),
     healthEndpoint: asFunction(healthEndpoint),
-    router: asFunction(router),
+    //router: asFunction(router),
     mongoose: asFunction(() => mongoose).singleton(),
-    bodyParser: asValue(bodyParser),
-    articlesSchema: asValue(articlesSchema),
+    bodyParser: asValue(bodyParser),  
+    //articlesSchema: asValue(articlesSchema),
+    articleEndpoint: asFunction(articleEndpoint)
 })
 
 module.exports = container.cradle;

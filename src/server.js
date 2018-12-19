@@ -1,4 +1,4 @@
-module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint, mongoose, articlesSchema, bodyParser }) => {
+module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint, mongoose, articleEndpoint, bodyParser }) => {
     let server;
     return {
         start: () => {
@@ -33,13 +33,13 @@ module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint
                     res.render('error')
                 })
 
-                app.post('/api/addarticle', articlesSchema.create)
+                app.post('/api/getArticle', articleEndpoint.find)
 
                 ///!!!!!!! need to refactor these to index.js !!!!!
 
                 //add database
 
-                mongoose.connect('mongodb://localhost/blogSite');
+                mongoose.connect('mongodb://localhost/blogSite', { useNewUrlParser: true });
                 mongoose.set('debug', true);
 
                 server = app.listen(envVariables.PORT, () => {
