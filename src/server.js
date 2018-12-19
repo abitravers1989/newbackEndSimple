@@ -29,11 +29,11 @@ module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint
                     res.status(200).json({ ping: 'pong' }),
                 );
 
+                app.get('/api/getArticle', articleEndpoint.find);
+
                 app.get('*', (req, res) => {
                     res.render('error')
                 })
-
-                app.post('/api/getArticle', articleEndpoint.find)
 
                 ///!!!!!!! need to refactor these to index.js !!!!!
 
