@@ -1,19 +1,19 @@
-module.exports = ({ healthEndpoint, articleEndpoint }) => ({
-    setupEndpoints: (express) => {
+module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
+    setupEndpoints: (app) => {
         try {
             //http://localhost:3000/api/readiness
-            express.use('/api/readiness', healthEndpoint.readiness);
+            app.use('/api/readiness', healthEndpoint.readiness);
 
             //http://localhost:3000/api/liveness
-            express.use('/api/liveness', healthEndpoint.liveness);
+            app.use('/api/liveness', healthEndpoint.liveness);
 
-            express.get(['/private/readiness', '/private/liveness'], (req, res) =>
+            app.get(['/private/readiness', '/private/liveness'], (req, res) =>
                 res.status(200).json({ ping: 'pong' }),
             );
 
-            express.get('/api/getArticle', articleEndpoint.find);
+            app.get('/api/getArticle', articleEndpoint.find);
 
-            express.get('*', (req, res) => {
+            app.get('*', (req, res) => {
                 res.render('error')
             });
         } catch (err) {

@@ -4,25 +4,41 @@ const sinon = require('sinon');
 const { expect } = chai;
 chai.use(require('sinon-chai'));
 
-const appFactory = require('.');
+const indexFactory = require('./index');
 
 describe('app', ()=> {
     const sandbox = sinon.createSandbox();
     const dependencies = {
-        express: {
-            get: sandbox.stub(),
-            post: () => {},
+        healthEndpoint: {
+            readiness: () => {},
+            liveness: () => {},
         },
+        articleEndpoint: {
+            find: () => {},
+        },
+        logger: {
+            error: () => {},
+        }
     };
 
-    const app = appFactory(dependencies);
-    const { express } = dependencies;
+    const index = indexFactory(dependencies);
 
     afterEach(() => sandbox.reset());
 
     after(() => sandbox.restore());
 
-    describe('setupApp()', () => {
-
-    })
-})
+    describe('index', () => {
+        describe('setupEndpoints(app)', () => {
+            const app = {
+                use: sandbox.stub(),
+                get: sandbox.stub(),
+                post: sandbox.stub(),
+            };
+            it('sets the correct routes', () => {
+                index.setupEndpoints(app)
+                const expectedRoutes = ['/private/readiness', '/private/liveness'];
+                expect(app.get).to.have.been.calledWith(expectedRoutes);
+            });
+        });
+    });
+});
