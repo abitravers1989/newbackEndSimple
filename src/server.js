@@ -1,8 +1,9 @@
-module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, mongoose, promisify }) => {
+module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, mongoose, promisify, articleEndpoint }) => {
     let server;
     return {
         start: () => {
             try {
+             
                 app.use(morgan('dev', {
                     skip: (req, res) => {
                         return res.statusCode < 400
@@ -19,6 +20,20 @@ module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, mongo
 
                 //add routes 
                 routes.setupEndpoints(app);
+                   //http://localhost:3000/api/postArticles
+                
+                // app.use()
+                // app.post('/api/postArticles', articleEndpoint.create);
+
+                app.use((err, req, res, next) => {
+                    new Error('An error occured in the app: ', err);
+                    res.status(500).send('There was an issue in the app')
+                });
+
+                app.post('/api', (req, res) => {
+                    console.log(req)
+                    res.render('request is:  ', req)
+                })
 
                 //add database
                 mongoose.connect('mongodb://localhost/blogSite', { useNewUrlParser: true });
