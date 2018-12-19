@@ -13,9 +13,7 @@ describe('server', () => {
     app: {
       listen: sandbox.stub(),
       use: sandbox.stub(),
-      get: sandbox.stub(),
-      post: () => {},
-     },
+    },
      envVariables: {
        PORT: 3000,
        NODE_ENV: 'dev',
@@ -25,16 +23,15 @@ describe('server', () => {
        info: sandbox.stub(),
        error: sandbox.stub(),
      },
-     promisify,
-     healthEndpoint: () => {},
+     routes: {
+      setupEndpoints: () => {}
+     },
+     bodyParser: () => {},
      mongoose: {
-       connect: () => {},
-       set: () => {},
-     },
-     articleEndpoint: {
-       find: () => {},
-     },
-    //  bodyParser: () => {}
+      connect: () => {},
+      set: () => {},
+    },
+     promisify,      
     };
 
   const server = serverFactory(dependencies);
@@ -53,7 +50,7 @@ describe('server', () => {
       }),
     };
 //Before hooks not working chai
-    it('starts up the express server on the coprrect port', () => {
+    it('starts up the express server on the correct port', () => {
       app.listen.returns(mockExpress);
       let actualServer;
       actualServer = server.start();
@@ -100,7 +97,7 @@ describe('server', () => {
           }),
           render: () => {}
         };
-        
+
         app.get.lastCall.yield(undefined, resMock);
         expect(resMock.status).to.have.been.calledWith(200);
         expect(resMock.status().json.firstCall.args[0]).to.deep.equal({ ping: 'pong' })

@@ -1,4 +1,4 @@
-module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint, mongoose, articleEndpoint, bodyParser }) => {
+module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, mongoose, promisify }) => {
     let server;
     return {
         start: () => {
@@ -15,38 +15,22 @@ module.exports = ({ app, envVariables, morgan, logger, promisify, healthEndpoint
                     }, stream: process.stdout
                 }));
 
-                ///!!!!!!! need to refactor these to index.js !!!!!
-
                 //app.use(bodyParser.json());
 
-                //http://localhost:3000/api/readiness
-                app.use('/api/readiness', healthEndpoint.readiness);
-
-                //http://localhost:3000/api/liveness
-                app.use('/api/liveness', healthEndpoint.liveness);
-
-                app.get(['/private/readiness', '/private/liveness'], (req, res) =>
-                    res.status(200).json({ ping: 'pong' }),
-                );
-
-                app.get('/api/getArticle', articleEndpoint.find);
-
-                app.get('*', (req, res) => {
-                    res.render('error')
-                })
-
-                ///!!!!!!! need to refactor these to index.js !!!!!
+                //add routes 
+                routes.setupEndpoints(app);
 
                 //add database
-
                 mongoose.connect('mongodb://localhost/blogSite', { useNewUrlParser: true });
                 mongoose.set('debug', true);
 
+                //startup the server
                 server = app.listen(envVariables.PORT, () => {
                     logger.info(`listening on port ${server.address().port}`)
                 }); 
+
             } catch (err) {
-                logger.error(err, 'Failed to start server')
+                logger.error(err, 'Failed to start server');
                 process.exit(1)
             }
             return server;

@@ -1,5 +1,5 @@
 const { createContainer, asFunction, asValue} = require('awilix');
-const express = require('express');
+const app = require('express');
 const morgan = require('morgan');
 const winston = require('winston');
 const { promisify } = require('util');
@@ -12,6 +12,7 @@ const server = require('./server');
 const healthEndpoint = require('./rest/routes/heath');
 const articlesSchema = require('./models/articles');
 const articleEndpoint = require('./rest/routes/articles');
+const routes = require('./rest/index')
 
 const container = createContainer();
 
@@ -29,18 +30,18 @@ try {
 }
 
 container.register({
-    app: asFunction(express),   
+    app: asFunction(app),   
     envVariables: asValue(envVariables),
     morgan: asValue(morgan),
     logger: asValue(winston),
     promisify: asValue(promisify),
-    server: asFunction(server).singleton(),
     healthEndpoint: asFunction(healthEndpoint),
-    //router: asFunction(router),
     mongoose: asFunction(() => mongoose).singleton(),
     bodyParser: asValue(bodyParser),  
     //articlesSchema: asValue(articlesSchema),
-    articleEndpoint: asFunction(articleEndpoint)
+    articleEndpoint: asFunction(articleEndpoint),
+    server: asFunction(server).singleton(),
+    routes: asFunction(routes),
 })
 
 module.exports = container.cradle;
