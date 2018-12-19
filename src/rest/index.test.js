@@ -15,6 +15,7 @@ describe('app', ()=> {
         },
         articleEndpoint: {
             find: () => {},
+            create: () => {},
         },
         logger: {
             error: () => {},

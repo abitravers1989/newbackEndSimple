@@ -7,8 +7,11 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
             //http://localhost:3000/api/liveness
             app.get('/api/liveness', healthEndpoint.liveness);
 
-            //http://localhost:3000/api/getArticle
+            //http://localhost:3000/api/getArticles
             app.get('/api/getArticles', articleEndpoint.find);
+
+            //http://localhost:3000/api/postArticles
+            app.post('/api/postArticles', articleEndpoint.create);
 
             app.get(['/private/readiness', '/private/liveness'], (req, res) =>
                 res.status(200).json({ ping: 'pong' }),
