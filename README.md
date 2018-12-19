@@ -21,6 +21,7 @@ After running it locally the following endpoints will be exposed:
 - http://localhost:3000/api/liveness
 - http://localhost:3000/private/readiness
 - http://localhost:3000/private/liveness
+- http://localhost:3000/api/getArticles
 
 ## Resources Used
 
