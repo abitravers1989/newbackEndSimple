@@ -67,43 +67,6 @@ describe('server', () => {
       expect(dependencies.logger.info).to.have.been.called;
      });
 
-     describe('health endpoints', () => {
-       it('sets the correct routes', () => {
-        const mockExpress = {
-          address: () => ({
-            PORT: dependencies.envVariables.PORT,
-          }),
-        };
-         app.listen.returns(mockExpress);
-         actualServer = server.start();
-         app.listen.yield();
-
-         const expectedRoutes = ['/private/readiness', '/private/liveness'];
-         expect(app.get).to.have.been.calledWith(expectedRoutes);
-       });
-       xit('sends a 200 response with "ping png" json payload', () => {
-        const mockExpress = {
-          address: () => ({
-            PORT: dependencies.envVariables.PORT,
-          }),
-        };
-         app.listen.returns(mockExpress);
-         actualServer = server.start();
-         app.listen.yield();
-
-         const resMock = {
-          status: sinon.stub().returns({
-            json: sinon.stub(),
-          }),
-          render: () => {}
-        };
-
-        app.get.lastCall.yield(undefined, resMock);
-        expect(resMock.status).to.have.been.calledWith(200);
-        expect(resMock.status().json.firstCall.args[0]).to.deep.equal({ ping: 'pong' })
-        });
-     })
-
      describe('when server creation fails', () => {
        it('exits the process and shuts down', () => {
         app.listen.throws();
