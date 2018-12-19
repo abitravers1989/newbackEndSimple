@@ -26,7 +26,7 @@ describe('server', () => {
      routes: {
       setupEndpoints: () => {}
      },
-     bodyParser: () => {},
+     //bodyParser: () => {},
      mongoose: {
       connect: () => {},
       set: () => {},
