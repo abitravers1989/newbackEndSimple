@@ -2,8 +2,15 @@ module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, mongo
     let server;
     return {
         start: () => {
+            process.on('uncaughtException', (err) => {
+                console.error('Unhandled Exception', err)
+              })
+              
+              process.on('uncaughtRejection', (err, promise) => {
+                console.error('Unhandled Rejection', err)
+              })
+
             try {
-             
                 app.use(morgan('dev', {
                     skip: (req, res) => {
                         return res.statusCode < 400
@@ -16,9 +23,11 @@ module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, mongo
                     }, stream: process.stdout
                 }));
 
-                //app.use(bodyParser.json());
+                app.use(bodyParser.json());
 
                 //add routes 
+
+                // app.use(routes.setupEndpoints(app))
                 routes.setupEndpoints(app);
                    //http://localhost:3000/api/postArticles
                 

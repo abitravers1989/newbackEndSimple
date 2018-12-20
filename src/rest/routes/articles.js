@@ -14,27 +14,29 @@ module.exports = () => ({
         return new Error('articles not found');
       }
     },
-    create: (req, res, next) => {
-      // const Articles = mongoose.model('Articles')
+    create: (req, res) => {
+      // console.log('req body is   :,', req.header)
+      //// const Articles = mongoose.model('Articles')
+      console.log(req);
       const { body } = req;
       try {
         if(!body.title) {
           return res.status(422).json({
-              errors: {
+              error: {
                   title: 'is required',
               },
           });
         }
         if(!body.postBody) {
           return res.status(422).json({
-              errors: {
+              error: {
                   body: 'is required',
               },
           });
         }
         if(!body.author) {
           return res.status(422).json({
-              errors: {
+              error: {
                   author: 'is required',
               },
           });

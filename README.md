@@ -17,11 +17,14 @@ All configuration is done using environment variables, the following are require
 
 After running it locally the following endpoints will be exposed:
 
+GET
 - http://localhost:3000/api/readiness
 - http://localhost:3000/api/liveness
 - http://localhost:3000/private/readiness
 - http://localhost:3000/private/liveness
 - http://localhost:3000/api/getArticles
+
+POST
 
 ## Resources Used
 

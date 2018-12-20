@@ -30,7 +30,7 @@ try {
 }
 
 container.register({
-    app: asFunction(app),   
+    app: asFunction(app).singleton(),   
     envVariables: asValue(envVariables),
     morgan: asValue(morgan),
     logger: asValue(winston),
