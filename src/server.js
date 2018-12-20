@@ -24,6 +24,7 @@ module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, mongo
                 }));
 
                 app.use(bodyParser.json());
+                app.use(bodyParser.urlencoded({ extended: true }));
 
                 //add routes 
 

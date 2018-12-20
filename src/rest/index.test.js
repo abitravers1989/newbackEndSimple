@@ -52,6 +52,7 @@ describe('app', ()=> {
                 //         json: sinon.stub(),
                 //     })
                 // };
+
                 // expect(mockRes.status).to.have.been.calledWith(200);
             });
             it('adds the correct response to the error route', () => {
@@ -72,3 +73,5 @@ describe('app', ()=> {
         });
     });
 });
+
+//https://github.com/ComparetheMarket/rewards.meerkat-memberships/blob/master/src/rest/health.spec.js
