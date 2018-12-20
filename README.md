@@ -26,6 +26,9 @@ GET
 
 POST
 
+- http://localhost:3000/api/postArticles
+example body for this post request: {"title": "Test title", "author": "Abi", "articleBody": "Test desc"}
+
 ## Resources Used
 
 https://blog.cloudboost.io/learn-how-to-create-a-simple-blog-with-react-node-c05fa6889de3

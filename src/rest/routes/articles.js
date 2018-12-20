@@ -1,9 +1,5 @@
-// module.exports = () => ({
-//     find: (req, res) => res.status(200).json({ ping: 'pong' })
-// });
-
-
-module.exports = () => ({
+module.exports = () => {
+  return {
     find: (req, res) => {
       try {
         const article = { title: 'Create an Express add with mongoDB', 
@@ -14,10 +10,11 @@ module.exports = () => ({
         return new Error('articles not found');
       }
     },
-    create: (req, res) => {
+    create: (req, res, next) => {
       // console.log('req body is   :,', req.header)
       //// const Articles = mongoose.model('Articles')
-      console.log(req);
+      console.log(req.body);
+      console.log(res.body);
       const { body } = req;
       try {
         if(!body.title) {
@@ -27,10 +24,10 @@ module.exports = () => ({
               },
           });
         }
-        if(!body.postBody) {
+        if(!body.articleBody) {
           return res.status(422).json({
               error: {
-                  body: 'is required',
+                articleBody: 'is required',
               },
           });
         }
@@ -48,8 +45,9 @@ module.exports = () => ({
       const { title, postBody, author } = body;
       res.status(200).json({ status: 'successfully posted:', title, postBody, author });
     },
-  });
-
+  }
+};
+    
 
 
 // try {
