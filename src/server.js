@@ -1,4 +1,4 @@
-module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, mongoose, promisify, articleEndpoint }) => {
+module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, mongoose, promisify, cors, helmet,  articleEndpoint }) => {
     let server;
     return {
         start: () => {
@@ -25,6 +25,7 @@ module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, mongo
 
                 app.use(bodyParser.json());
                 app.use(bodyParser.urlencoded({ extended: true }));
+               // app.use(cors());
 
                 //add routes 
 
@@ -44,10 +45,20 @@ module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, mongo
                     console.log(req)
                     res.render('request is:  ', req)
                 })
-
+//!!!!!!!!!!! reafctor this into a repository file with a start method and a ctahc for the error
                 //add database
                 mongoose.connect('mongodb://localhost/blogSite', { useNewUrlParser: true });
+                mongoose.Promise = global.Promise;
                 mongoose.set('debug', true);
+                // Get the default connection
+                const db = mongoose.connection;
+                //bind the connection to an error event to get notifications of connection errors 
+                db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+//!!!!!!!!!!!!!!
+
+                //!!!!!!!!!
+                //add model
+                //req(model/article)
 
                 //startup the server
                 server = app.listen(envVariables.PORT, () => {
