@@ -22,8 +22,14 @@
   "dependencies": {
     "awilix": "^4.0.1",
     "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
+    "helmet": "^3.15.0",
+    "mongo": "^0.1.0",
+    "mongod": "^2.0.0",
+    "mongodb": "^3.1.10",
     "mongoose": "^5.4.0",
+    "monk": "^6.0.6",
     "morgan": "^1.9.1",
     "winston": "^3.1.0"
   }
