@@ -7,6 +7,9 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
             //http://localhost:3000/api/liveness
             app.get('/api/liveness', healthEndpoint.liveness);
 
+            //http://localhost:3000/api/trygetArticles
+            app.get('/api/trygetArticles', articleEndpoint.get);
+
             //http://localhost:3000/api/getArticles
             app.get('/api/getArticles', articleEndpoint.find);
 

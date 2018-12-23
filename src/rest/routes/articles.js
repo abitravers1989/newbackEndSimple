@@ -1,5 +1,21 @@
-module.exports = () => {
+
+module.exports = (articleDbModel, mongoose) => {
   return {
+    get: (req, res) => {
+      var monk = require('monk');
+      var db = monk('localhost:27017/blogSite')
+
+      var collection = db.get('posts');
+
+      collection.find({}, {}, function (err, docs) {
+          res.status(200).json({ ping: docs })
+      });
+      
+      
+      // const article = articleDbModel;
+      // console.log(articleDbModel)
+      //const Articles = mongoose.model('Articles');
+    },
     find: (req, res) => {
       try {
         const article = { title: 'Create an Express add with mongoDB', 
@@ -11,10 +27,7 @@ module.exports = () => {
       }
     },
     create: (req, res, next) => {
-      // console.log('req body is   :,', req.header)
-      //// const Articles = mongoose.model('Articles')
       console.log(req.body);
-      console.log(res.body);
       const { body } = req;
       try {
         if(!body.title) {
@@ -41,54 +54,8 @@ module.exports = () => {
       } catch(err) {
         return new Error('title, postBody and author must be in the post body');
       }
-
-      const { title, postBody, author } = body;
+      const { title, articleBody, author } = body;
       res.status(200).json({ status: 'successfully posted:', title, postBody, author });
     },
   }
 };
-    
-
-
-// try {
-//     const article = { title: 'Create an Express add with mongoDB', body: 'A post on how to TDD an express app with dependency injection and a mongo DB', author: 'abi'};
-//     res.send(article)
-// } catch (err) {
-//     return new Error('articles not found')
-// }
-
-
-
-
-    // create: (req, res, next) => {
-    //     // const Articles = mongoose.model('Articles')
-    //     const { body } = req;
-    //     if(!body.title) {
-    //         return res.status(422).json({
-    //             errors: {
-    //                 title: 'is required',
-    //             },
-    //         });
-    //     }
-    //     if(!body.postBody) {
-    //         return res.status(422).json({
-    //             errors: {
-    //                 body: 'is required',
-    //             },
-    //         });
-    //     }
-    //     if(!body.author) {
-    //         return res.status(422).json({
-    //             errors: {
-    //                 author: 'is required',
-    //             },
-    //         });
-    //     }
-
-    //     const { title, postBody, author } = body;
-
-    //     const postedArticle = new Articles(body);
-    //     return postedArticle.save()
-    //         .then(() => res.json({ article: postedArticle.toJSON() }))
-    //         .catch(next);
-    // }
