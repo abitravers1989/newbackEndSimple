@@ -27,42 +27,18 @@ module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, promi
                     res.status(500).send('There was an issue in the app:', err)
                 });
 
-                const mongoose = require('mongoose');
-// //!!!!!!!!!!! reafctor this into a repository file with a start method and a ctahc for the error
-//                 //add database
-                mongoose.connect('mongodb://localhost:27017/blogSite', { useNewUrlParser: true });
-                mongoose.Promise = global.Promise;
-                mongoose.set('debug', true);
-//                 // Get the default connection
-//                 const db = mongoose.connection;
-//                 //bind the connection to an error event to get notifications of connection errors 
-//                 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-              
-                var postSchema = new mongoose.Schema({body: String});
-                var Post = mongoose.model('Post', postSchema);
-
-                var postData = new Post({body: 'Working to save posts'});
-                postData.save().then(result => {
-                    console.log('saved')
-                }).catch(err => {
-                    console.log('unable to save')
-                });
-
-                // Post.find({}, (err, posts) => {
-                //     console.log(posts)
-                // })
-                 
-
-//!!!!!!!!!!!!!!
+                const mongodb = require('./repositories/mongodb');
+                mongodb().connect();
                 
-                // var monk = require('monk');
-                // var db = monk('localhost:27017/blogSite')
+                // var postSchema = new mongoose.Schema({body: String});
+                // var Post = mongoose.model('Post', postSchema);
 
-                // var collection = db.get('posts');
-
-                // collection.find({}, {}, function (err, docs) {
-                //     console.log(docs)
-                // })
+                // var postData = new Post({body: 'Working to save posts'});
+                // postData.save().then(result => {
+                //     console.log('saved')
+                // }).catch(err => {
+                //     console.log('unable to save')
+                // });
 
                 //startup the server
                 server = app.listen(envVariables.PORT, () => {

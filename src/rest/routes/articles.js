@@ -10,11 +10,6 @@ module.exports = (articleDbModel, mongoose) => {
       collection.find({}, {}, function (err, docs) {
           res.status(200).json({ ping: docs })
       });
-      
-      
-      // const article = articleDbModel;
-      // console.log(articleDbModel)
-      //const Articles = mongoose.model('Articles');
     },
     find: (req, res) => {
       try {
