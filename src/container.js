@@ -6,6 +6,8 @@ const { promisify } = require('util');
 //const router = express.Router();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
+const cors = require('cors');
 
 const getEnvVar = require('./utils/getEnvVar');
 const server = require('./server');
@@ -31,14 +33,16 @@ try {
 
 container.register({
     app: asFunction(app).singleton(),   
-    envVariables: asValue(envVariables),
     morgan: asValue(morgan),
     logger: asValue(winston),
     promisify: asValue(promisify),
     healthEndpoint: asFunction(healthEndpoint),
     mongoose: asFunction(() => mongoose).singleton(),
     bodyParser: asValue(bodyParser),  
-    //articlesSchema: asValue(articlesSchema),
+    helmet: asValue(helmet),
+    cors: asValue(cors),
+    articleDbModel: asValue(articlesSchema),
+    envVariables: asValue(envVariables),
     articleEndpoint: asFunction(articleEndpoint),
     server: asFunction(server).singleton(),
     routes: asFunction(routes),
