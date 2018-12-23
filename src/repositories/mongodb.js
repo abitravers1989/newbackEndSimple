@@ -10,7 +10,6 @@ module.exports = () => {
             // //bind the connection to an error event to get notifications of connection errors 
             // db.on('error', console.error.bind(console, 'MongoDB connection error:'));
             // return db;
-
         },
         // createPostSchema: () => {
         //     var postSchema = new mongoose.Schema({body: String});
