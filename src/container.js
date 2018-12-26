@@ -14,7 +14,8 @@ const server = require('./server');
 const healthEndpoint = require('./rest/routes/heath');
 const articlesSchema = require('./models/articles');
 const articleEndpoint = require('./rest/routes/articles');
-const routes = require('./rest/index')
+const routes = require('./rest/index');
+//const logger = require('./utils/logger');
 
 const container = createContainer();
 
@@ -41,6 +42,7 @@ container.register({
     bodyParser: asValue(bodyParser),  
     helmet: asValue(helmet),
     cors: asValue(cors),
+    // logger: asValue(logger),
     articleDbModel: asValue(articlesSchema),
     envVariables: asValue(envVariables),
     articleEndpoint: asFunction(articleEndpoint),

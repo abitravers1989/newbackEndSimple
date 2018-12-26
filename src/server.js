@@ -29,16 +29,6 @@ module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, promi
 
                 const mongodb = require('./repositories/mongodb');
                 mongodb().connect();
-                
-                // var postSchema = new mongoose.Schema({body: String});
-                // var Post = mongoose.model('Post', postSchema);
-
-                // var postData = new Post({body: 'Working to save posts'});
-                // postData.save().then(result => {
-                //     console.log('saved')
-                // }).catch(err => {
-                //     console.log('unable to save')
-                // });
 
                 //startup the server
                 server = app.listen(envVariables.PORT, () => {
