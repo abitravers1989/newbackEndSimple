@@ -22,18 +22,21 @@ module.exports = (articleDbModel, mongoose) => {
       }
     },
     create: (req, res, next) => {
-     // const mongodb = require('./repositories/mongodb');
-      //const Post = mongodb().createPostSchema();
+      const mongodb = require('../../repositories/mongodb');
+     // const Post = mongodb().createPostSchema();
 
-        // var postSchema = new mongoose.Schema({body: String});
-                // var Post = mongoose.model('Post', postSchema);
+     const mongoose = require('mongoose');
+     const postSchema = new mongoose.Schema({body: String});
+     const  Post = mongoose.model('Post', postSchema);
 
-                // var postData = new Post({body: 'Working to save posts'});
-                // postData.save().then(result => {
-                //     console.log('saved')
-                // }).catch(err => {
-                //     console.log('unable to save')
-                // });
+     var postData = new Post({body: 'Post moved into article route'});
+     postData.save().then(result => {
+         console.log('saved')
+      }).catch(err => {
+          console.log('unable to save')
+      });
+
+
       console.log(req.body);
       const { body } = req;
       try {
