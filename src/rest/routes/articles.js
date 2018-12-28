@@ -22,11 +22,10 @@ module.exports = (articleDbModel, mongoose) => {
       }
     },
     create: (req, res, next) => {
-     // const mongoose = require('mongoose');
-      const articleSchema = require('../../models/articles');
-
+      const mongoose = require('mongoose');
+      
       //this can only be called once 
-      const Article = articleSchema().createArticleSchema();
+      const Article = mongoose.model('Article')
 
      const { body } = req;
      const { title, articleBody, author } = body;

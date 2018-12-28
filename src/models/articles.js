@@ -1,5 +1,4 @@
-module.exports = () => {
-  return {
+module.exports = () => ({
       createArticleSchema: () => {
           const mongoose = require('mongoose');
           var articlesSchema = new mongoose.Schema({
@@ -10,5 +9,4 @@ module.exports = () => {
           const Article = mongoose.model('Article', articlesSchema);
           return Article;
       }
-  }
-};
+});

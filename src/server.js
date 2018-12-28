@@ -27,8 +27,13 @@ module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, promi
                     res.status(500).send('There was an issue in the app:', err)
                 });
 
+                //connect to the database
                 const mongodb = require('./repositories/mongodb');
                 mongodb().connect();
+
+                //create the schema
+                const articleSchema = require('./models/articles');
+                articleSchema().createArticleSchema();
 
                 //startup the server
                 server = app.listen(envVariables.PORT, () => {
