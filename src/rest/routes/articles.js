@@ -24,6 +24,8 @@ module.exports = (articleDbModel, mongoose) => {
     create: (req, res, next) => {
      // const mongoose = require('mongoose');
       const mongodb = require('../../repositories/mongodb');
+
+      //this can only be called once 
       const Article = mongodb().createPostSchema();
 
      const { body } = req;
