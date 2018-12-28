@@ -1,4 +1,4 @@
-module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, promisify, cors, helmet,  articleEndpoint }) => {
+module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, promisify, mongodb }) => {
     let server;
     return {
         start: () => {
@@ -28,10 +28,9 @@ module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, promi
                 });
 
                 //connect to the database
-                const mongodb = require('./repositories/mongodb');
-                mongodb().connect();
+                mongodb.connect();
 
-                //create the schema
+                //create the schema 
                 const articleSchema = require('./models/articles');
                 articleSchema().createArticleSchema();
 

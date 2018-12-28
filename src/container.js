@@ -3,11 +3,11 @@ const app = require('express');
 const morgan = require('morgan');
 const winston = require('winston');
 const { promisify } = require('util');
-//const router = express.Router();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const helmet = require('helmet');
-const cors = require('cors');
+
+// const helmet = require('helmet');
+// const cors = require('cors');
 
 const getEnvVar = require('./utils/getEnvVar');
 const server = require('./server');
@@ -15,6 +15,7 @@ const healthEndpoint = require('./rest/routes/heath');
 const articlesSchema = require('./models/articles');
 const articleEndpoint = require('./rest/routes/articles');
 const routes = require('./rest/index');
+const mongodb = require('./repositories/mongodb');
 //const logger = require('./utils/logger');
 
 const container = createContainer();
@@ -39,9 +40,10 @@ container.register({
     promisify: asValue(promisify),
     healthEndpoint: asFunction(healthEndpoint),
     mongoose: asFunction(() => mongoose).singleton(),
-    bodyParser: asValue(bodyParser),  
-    helmet: asValue(helmet),
-    cors: asValue(cors),
+    bodyParser: asValue(bodyParser), 
+    mongodb: asFunction(mongodb).singleton(), 
+    // helmet: asValue(helmet),
+    // cors: asValue(cors),
     // logger: asValue(logger),
     articleDbModel: asValue(articlesSchema),
     envVariables: asValue(envVariables),
