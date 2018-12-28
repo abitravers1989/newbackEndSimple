@@ -22,16 +22,13 @@ module.exports = (articleDbModel, mongoose) => {
       }
     },
     create: (req, res, next) => {
+     // const mongoose = require('mongoose');
       const mongodb = require('../../repositories/mongodb');
-       mongodb().createPostSchema();
-      //  const postSchema = mongodb().createPostSchema();
-       console.log(mongodb().createPostSchema());
+      const Post = mongodb().createPostSchema();
 
-     const mongoose = require('mongoose');
-     const postSchema = new mongoose.Schema({body: String});
-     const  Post = mongoose.model('Post', postSchema);
+     const { body } = req;
 
-     var postData = new Post({body: 'Post moved into article route'});
+     var postData = new Post({body: toString(body)});
      postData.save().then(result => {
          console.log('saved')
       }).catch(err => {
@@ -40,7 +37,7 @@ module.exports = (articleDbModel, mongoose) => {
 
 
       console.log(req.body);
-      const { body } = req;
+      
       try {
         if(!body.title) {
           return res.status(422).json({
