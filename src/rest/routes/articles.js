@@ -23,7 +23,9 @@ module.exports = (articleDbModel, mongoose) => {
     },
     create: (req, res, next) => {
       const mongodb = require('../../repositories/mongodb');
-     // const Post = mongodb().createPostSchema();
+       mongodb().createPostSchema();
+      //  const postSchema = mongodb().createPostSchema();
+       console.log(mongodb().createPostSchema());
 
      const mongoose = require('mongoose');
      const postSchema = new mongoose.Schema({body: String});

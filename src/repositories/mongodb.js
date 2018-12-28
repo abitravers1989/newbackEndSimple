@@ -12,9 +12,12 @@ module.exports = () => {
             // return db;
         },
         createPostSchema: () => {
+            const mongoose = require('mongoose');
             var postSchema = new mongoose.Schema({body: String});
-            var Post = mongoose.model('Post', postSchema);
-            return Post;
+            return postSchema;
+            //return mongoose.model('Post', postSchema);
+             //var Post = mongoose.model('Post', postSchema);
+            // return Post;
         }
     }
 };
