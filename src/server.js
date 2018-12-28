@@ -1,4 +1,4 @@
-module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, promisify, mongodb }) => {
+module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, promisify, mongodb, articleSchema }) => {
     let server;
     return {
         start: () => {
@@ -31,8 +31,7 @@ module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, promi
                 mongodb.connect();
 
                 //create the schema 
-                const articleSchema = require('./models/articles');
-                articleSchema().createArticleSchema();
+                articleSchema.createArticleSchema();
 
                 //startup the server
                 server = app.listen(envVariables.PORT, () => {
