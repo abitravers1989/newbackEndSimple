@@ -13,9 +13,13 @@ module.exports = () => {
         },
         createPostSchema: () => {
             const mongoose = require('mongoose');
-            var postSchema = new mongoose.Schema({body: String});
-            const Post = mongoose.model('Post', postSchema);
-            return Post;
+            var articlesSchema = new mongoose.Schema({
+                title: String,
+                articleBody: String,
+                author: String,
+              });
+            const Article = mongoose.model('Article', articlesSchema);
+            return Article;
         }
     }
 };

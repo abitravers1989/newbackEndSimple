@@ -5,7 +5,7 @@ module.exports = (articleDbModel, mongoose) => {
       var monk = require('monk');
       var db = monk('localhost:27017/blogSite')
 
-      var collection = db.get('posts');
+      var collection = db.get('articles');
 
       collection.find({}, {}, function (err, docs) {
           res.status(200).json({ ping: docs })
@@ -24,12 +24,13 @@ module.exports = (articleDbModel, mongoose) => {
     create: (req, res, next) => {
      // const mongoose = require('mongoose');
       const mongodb = require('../../repositories/mongodb');
-      const Post = mongodb().createPostSchema();
+      const Article = mongodb().createPostSchema();
 
      const { body } = req;
+     const { title, articleBody, author } = body;
 
-     var postData = new Post({body: toString(body)});
-     postData.save().then(result => {
+     var articleData = new Article({ title, articleBody, author});
+     articleData.save().then(result => {
          console.log('saved')
       }).catch(err => {
           console.log('unable to save')
@@ -63,7 +64,7 @@ module.exports = (articleDbModel, mongoose) => {
       } catch(err) {
         return new Error('title, postBody and author must be in the post body');
       }
-      const { title, articleBody, author } = body;
+      
       res.status(200).json({ status: 'successfully posted:', title, articleBody, author });
     },
   }
