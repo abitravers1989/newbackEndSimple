@@ -1,7 +1,9 @@
 
-module.exports = (articleDbModel, mongoose) => {
+module.exports = ({ mongoose }) => {
+  
   return {
     get: (req, res) => {
+      
       var monk = require('monk');
       var db = monk('localhost:27017/blogSite')
 
@@ -11,35 +13,18 @@ module.exports = (articleDbModel, mongoose) => {
           res.status(200).json({ ping: docs })
       });
     },
-    find: (req, res) => {
-      try {
-        const article = { title: 'Create an Express add with mongoDB', 
-        body: 'A post on how to TDD an express app with dependency injection and a mongo DB', 
-        author: 'abi'};
-        res.status(200).json(article);
-      } catch (err) {
-        return new Error('articles not found');
-      }
-    },
-    create: (req, res, next) => {
-      const mongoose = require('mongoose');
-      
-      //this can only be called once 
-      const Article = mongoose.model('Article')
-
+    // find: (req, res) => {
+    //   try {
+    //     const article = { title: 'Create an Express add with mongoDB', 
+    //     body: 'A post on how to TDD an express app with dependency injection and a mongo DB', 
+    //     author: 'abi'};
+    //     res.status(200).json(article);
+    //   } catch (err) {
+    //     return new Error('articles not found');
+    //   }
+    // },
+    create: (req, res) => {
      const { body } = req;
-     const { title, articleBody, author } = body;
-
-     var articleData = new Article({ title, articleBody, author});
-     articleData.save().then(result => {
-         console.log('saved')
-      }).catch(err => {
-          console.log('unable to save')
-      });
-
-
-      console.log(req.body);
-      
       try {
         if(!body.title) {
           return res.status(422).json({
@@ -66,6 +51,15 @@ module.exports = (articleDbModel, mongoose) => {
         return new Error('title, postBody and author must be in the post body');
       }
       
+     const Article = mongoose.model('Article')
+     const { title, articleBody, author } = body;
+
+     var articleData = new Article({ title, articleBody, author});
+     articleData.save().then(result => {
+         console.log('saved')
+      }).catch(err => {
+          console.log('unable to save')
+      }); 
       res.status(200).json({ status: 'successfully posted:', title, articleBody, author });
     },
   }

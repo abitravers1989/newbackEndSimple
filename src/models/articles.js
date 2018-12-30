@@ -1,6 +1,5 @@
-module.exports = () => ({
+module.exports = ({mongoose}) => ({
       createArticleSchema: () => {
-          const mongoose = require('mongoose');
           var articlesSchema = new mongoose.Schema({
               title: String,
               articleBody: String,

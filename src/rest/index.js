@@ -11,7 +11,7 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
             app.get('/api/trygetArticles', articleEndpoint.get);
 
             //http://localhost:3000/api/getArticles
-            app.get('/api/getArticles', articleEndpoint.find);
+            //app.get('/api/getArticles', articleEndpoint.find);
 
             //http://localhost:3000/api/postArticles
             app.post('/api/postArticles', articleEndpoint.create);

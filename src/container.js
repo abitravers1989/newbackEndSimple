@@ -57,7 +57,7 @@ container.register({
 
 //mongo database specific dependencies 
 container.register({
-    mongoose: asFunction(() => mongoose).singleton(),
+    mongoose: asFunction(() => mongoose),
     mongodb: asFunction(mongodb).singleton(), 
     articleSchema: asFunction(articleSchema).singleton(),
 })
