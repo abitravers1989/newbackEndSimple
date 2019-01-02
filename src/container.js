@@ -17,6 +17,7 @@ const articleEndpoint = require('./rest/routes/articles');
 const routes = require('./rest/index');
 const mongodb = require('./repositories/mongodb');
 const articleSchema = require('./models/articles');
+const articlevalidation = require('./rest/routes/utils/articleValidation');
 //const logger = require('./utils/logger');
 
 const container = createContainer();
@@ -53,6 +54,7 @@ container.register({
     articleEndpoint: asFunction(articleEndpoint),
     server: asFunction(server).singleton(),
     routes: asFunction(routes),
+    articlevalidation: asFunction(articlevalidation),
 })
 
 //mongo database specific dependencies 

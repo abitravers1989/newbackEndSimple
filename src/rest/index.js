@@ -13,8 +13,8 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
             //http://localhost:3000/api/postArticles
             app.post('/api/postArticles', articleEndpoint.create);
 
-            //http://localhost:3000/api/id
-           // app.get('api/getArticle', articleEndpoint.getById);
+            //http://localhost:3000/api/getArticle?title=hi
+            app.get('api/getArticle', articleEndpoint.getById);
 
             app.get(['/private/readiness', '/private/liveness'], (req, res) =>
                 res.status(200).json({ ping: 'pong' }),
@@ -24,6 +24,7 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
                 res.render('error')
             });
         } catch (err) {
+            console.log('error setting up routes', err)
             logger.error(err, 'Failed to setup app routes');
         }
     }
