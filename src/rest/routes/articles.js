@@ -1,28 +1,6 @@
 
-module.exports = ({ mongoose }) => {
-  
+module.exports = ({ mongoose }) => { 
   return {
-    get: (req, res) => {
-      
-      var monk = require('monk');
-      var db = monk('localhost:27017/blogSite')
-
-      var collection = db.get('articles');
-
-      collection.find({}, {}, function (err, docs) {
-          res.status(200).json({ ping: docs })
-      });
-    },
-    // find: (req, res) => {
-    //   try {
-    //     const article = { title: 'Create an Express add with mongoDB', 
-    //     body: 'A post on how to TDD an express app with dependency injection and a mongo DB', 
-    //     author: 'abi'};
-    //     res.status(200).json(article);
-    //   } catch (err) {
-    //     return new Error('articles not found');
-    //   }
-    // },
     create: (req, res) => {
      const { body } = req;
       try {
@@ -49,18 +27,44 @@ module.exports = ({ mongoose }) => {
         }
       } catch(err) {
         return new Error('title, postBody and author must be in the post body');
-      }
-      
-     const Article = mongoose.model('Article')
-     const { title, articleBody, author } = body;
+      }   
 
-     var articleData = new Article({ title, articleBody, author});
-     articleData.save().then(result => {
-         console.log('saved')
-      }).catch(err => {
-          console.log('unable to save')
-      }); 
+
+      try {
+        const { title, articleBody, author } = body;
+        const Article = mongoose.model('Article'); 
+        var articleData = new Article({ title, articleBody, author});
+        articleData.save().then(result => {
+            console.log('saved')
+         }).catch(err => {
+             console.log('unable to save')
+         }); 
+      } catch(err) {
+        //replace with logger
+        console.log(`An error occured while trying to save the article to the db:`, err)
+      }
       res.status(200).json({ status: 'successfully posted:', title, articleBody, author });
     },
+    get: (req, res, next) => {
+      try {
+        console.log('hhhhhhhhhhhhhhhh')
+        const Article = mongoose.model('Article');  
+        return Article.find()
+          .sort({ createdAt: 'descending' })
+          .then((articles) => res.json({articles: articles.map(article => article.toJSON()) }))
+          .catch(next);
+      } catch(err) {
+        //replace with logger
+        console.log(`An error occured while trying to get all articles from the db:`, err)
+      }    
+    },
+    // getById: (req, res) => {
+    //  // const Article = mongoose.model('Article');
+    //   console.log(req.params);
+    //   // Article.findById(req.params._id, (err, article) =>{
+    //   //   if(err) { res.send(err) }
+    //   //   res.status(200).json(article);
+    //   // })
+    // }
   }
 };

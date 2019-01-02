@@ -7,14 +7,14 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
             //http://localhost:3000/api/liveness
             app.get('/api/liveness', healthEndpoint.liveness);
 
-            //http://localhost:3000/api/trygetArticles
-            app.get('/api/trygetArticles', articleEndpoint.get);
-
-            //http://localhost:3000/api/getArticles
-            //app.get('/api/getArticles', articleEndpoint.find);
+            //http://localhost:3000/api/getAllArticles
+            app.get('/api/getAllArticles', articleEndpoint.get);
 
             //http://localhost:3000/api/postArticles
             app.post('/api/postArticles', articleEndpoint.create);
+
+            //http://localhost:3000/api/id
+           // app.get('api/getArticle', articleEndpoint.getById);
 
             app.get(['/private/readiness', '/private/liveness'], (req, res) =>
                 res.status(200).json({ ping: 'pong' }),
