@@ -37,7 +37,7 @@ module.exports = ({ mongoose, articlevalidation}) => {
       // })
     },
 
-    deleteArticle: (req, res) => { 
+    deleteArticlebyID: (req, res) => { 
       const Article = mongoose.model('Article'); 
       //TODO validate query.id
       return Article.findByIdAndRemove(req.query.id)
