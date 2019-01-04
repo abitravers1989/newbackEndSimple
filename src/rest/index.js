@@ -16,6 +16,9 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
             //http://localhost:3000/api/getArticle?title=hi
             app.get('api/getArticle', articleEndpoint.getById);
 
+            //http://localhost:3000/api/id?id=5c1938eab5c54772905d0b26
+            app.delete('/api/id', articleEndpoint.deleteArticle);
+
             app.get(['/private/readiness', '/private/liveness'], (req, res) =>
                 res.status(200).json({ ping: 'pong' }),
             );
