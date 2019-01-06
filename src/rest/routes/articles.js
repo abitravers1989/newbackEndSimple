@@ -27,14 +27,19 @@ module.exports = ({ mongoose, articlevalidation}) => {
       });   
     },
 
-    getById: (req, res) => {
-     // const Article = mongoose.model('Article');
-     console.log('params are', req.query.title)
-     res.status(200).json({ status: 'successfully posted:' });
-      // Article.findById(req.params._id, (err, article) =>{
-      //   if(err) { res.send(err) }
-      //   res.status(200).json(article)
-      // })
+    getbyId: (req, res, next) => {
+      const Article = mongoose.model('Article');  
+      console.log('params are!!!!!!!!!!!!!!!!!', req.query.title)
+      const idFromReq = req.query.id;
+      console.log('!!!!!!!!!!!!!!!!!!!!', idFromReq)
+      return Article.findById(idFromReq, (err, article) => {
+        if(err) {
+          return res.status(404).json({error: err})
+        } else if (article) {
+          res.status(200).json({article})
+          return next();
+        }
+      })  
     },
 
     deleteArticlebyID: (req, res) => { 
@@ -47,5 +52,6 @@ module.exports = ({ mongoose, articlevalidation}) => {
         console.log(`unable to deleteArticle with provided ID`, err)
       });
     },
+
   }
 };
