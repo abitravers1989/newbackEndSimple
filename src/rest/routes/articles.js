@@ -29,9 +29,7 @@ module.exports = ({ mongoose, articlevalidation}) => {
 
     getbyId: (req, res, next) => {
       const Article = mongoose.model('Article');  
-      console.log('params are!!!!!!!!!!!!!!!!!', req.query.title)
       const idFromReq = req.query.id;
-      console.log('!!!!!!!!!!!!!!!!!!!!', idFromReq)
       return Article.findById(idFromReq, (err, article) => {
         if(err) {
           return res.status(404).json({error: err})
@@ -53,5 +51,24 @@ module.exports = ({ mongoose, articlevalidation}) => {
       });
     },
 
+    // findArticleByID: (req, res, next) => {
+    //   const Article = mongoose.model('Article');  
+    //   console.log('params are!!!!!!!!!!!!!!!!!', req.query.title)
+    //   const idFromReq = req.query.id;
+    //   console.log('!!!!!!!!!!!!!!!!!!!!', idFromReq)
+    //   return Article.findById(idFromReq, (err, article) => {
+    //     if(err) {
+    //       return res.status(404).json({error: err})
+    //     } else if (article) {
+    //       req.article = article;
+    //       return next();
+    //     }
+    //   }).catch(next)
+    // },
+
+    // editByID: (req, res, next) => {
+    //   findArticleByID(req, res, next);
+    //   res.status(200).json({article: req.article})
+    // },
   }
 };
