@@ -24,10 +24,6 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
             //PUT  http://localhost:3000/api/editArticle
             app.put('/api/editArticle', (req, res) => {
                 res.status(200).json({status: `successfully deleted Article with given id:`})
-            })
-
-            app.get('*', (req, res) => {
-                res.render('error')
             });
 
             //TODO refactor this into utils middleware 
