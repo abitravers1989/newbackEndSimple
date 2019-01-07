@@ -21,12 +21,7 @@ module.exports = ({ app, envVariables, morgan, logger, routes, bodyParser, promi
 
                 //add routes 
                 routes.setupEndpoints(app);
-
-                app.use((err, req, res, next) => {
-                    new Error('An error occured in the app: ', err);
-                    res.status(500).send('There was an issue in the app:', err)
-                });
-
+                
                 //connect to the database
                 mongodb.connect();
 

@@ -15,7 +15,7 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
             //POST  http://localhost:3000/api/postArticles
             app.post('/api/postArticles', articleEndpoint.create);
 
-            //http://localhost:3000/api/getArticle?id=5c2607c2c985392046d08b92
+            //http://localhost:3000/api/getArticle?id=5c260405b72fac1f24283e89
             app.get('/api/getArticle', articleEndpoint.getbyId);
 
             //DELETE  http://localhost:3000/api/id?id=5c1938eab5c54772905d0b26
@@ -29,6 +29,15 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
             app.get('*', (req, res) => {
                 res.render('error')
             });
+
+            //TODO refactor this into utils middleware 
+            app.use((err, req, res, next) => {
+                res.status(err.status || 500).json({
+                    message: err.message,
+                    error: err
+                });
+            });
+
         } catch (err) {
             console.log('error setting up routes', err)
             logger.error(err, 'Failed to setup app routes');

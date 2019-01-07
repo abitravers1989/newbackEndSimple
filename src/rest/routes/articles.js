@@ -27,17 +27,38 @@ module.exports = ({ mongoose, articlevalidation}) => {
       });   
     },
 
+    //TODO refactor this out so can be used twice. app.param should be used
+    // findArticleByID: (req, res, next) => {
+    //   const Article = mongoose.model('Article');  
+    //   const idFromReq = req.query.id;
+    //   return Article.findById(idFromReq, (err, article) => {
+    //     if(err) {
+    //       return res.status(404).json({error: err})
+    //     } else if (article) {
+    //       req.article = article;
+    //       // const art = req.article
+    //       // res.status(200).json({art})
+    //       return next();
+    //     }
+    //   }); 
+    // },
+
     getbyId: (req, res, next) => {
       const Article = mongoose.model('Article');  
       const idFromReq = req.query.id;
       return Article.findById(idFromReq, (err, article) => {
         if(err) {
-          return res.status(404).json({error: err})
-        } else if (article) {
-          res.status(200).json({article})
+          res.status(404).json({error: err});
+          return next(error);
+        };
+        if(!article) {
+          return next(new Error('Article not found'))
+        }
+        else if (article) {
+          res.status(200).json({article});
           return next();
         }
-      })  
+      }); 
     },
 
     deleteArticlebyID: (req, res) => { 
@@ -51,24 +72,10 @@ module.exports = ({ mongoose, articlevalidation}) => {
       });
     },
 
-    // findArticleByID: (req, res, next) => {
-    //   const Article = mongoose.model('Article');  
-    //   console.log('params are!!!!!!!!!!!!!!!!!', req.query.title)
-    //   const idFromReq = req.query.id;
-    //   console.log('!!!!!!!!!!!!!!!!!!!!', idFromReq)
-    //   return Article.findById(idFromReq, (err, article) => {
-    //     if(err) {
-    //       return res.status(404).json({error: err})
-    //     } else if (article) {
-    //       req.article = article;
-    //       return next();
-    //     }
-    //   }).catch(next)
-    // },
-
     // editByID: (req, res, next) => {
-    //   findArticleByID(req, res, next);
+    //  // findArticleByID(req, res, next);
     //   res.status(200).json({article: req.article})
     // },
+
   }
 };
