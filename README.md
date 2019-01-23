@@ -29,6 +29,12 @@ POST
 - http://localhost:3000/api/postArticles
 example body for this post request: {"title": "Test title", "author": "Abi", "articleBody": "Test desc"}
 
+DELETE 
+- http://localhost:3000/api/id?id=5c1938eab5c54772905d0b26
+
+PUT
+- 
+
 ## Resources Used
 
 https://blog.cloudboost.io/learn-how-to-create-a-simple-blog-with-react-node-c05fa6889de3
