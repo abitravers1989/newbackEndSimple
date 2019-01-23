@@ -22,9 +22,7 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
             app.delete('/api/id', articleEndpoint.deleteArticlebyID);
 
             //PUT  http://localhost:3000/api/editArticle
-            app.put('/api/editArticle', (req, res) => {
-                res.status(200).json({status: `successfully deleted Article with given id:`})
-            });
+            app.put('/api/editArticle', articleEndpoint.editByTitle);
 
             //TODO refactor this into utils middleware 
             app.use((err, req, res, next) => {

@@ -18,6 +18,9 @@ module.exports = ({ mongoose, articlevalidation}) => {
 
     get: (req, res, next) => {
       const Article = mongoose.model('Article');  
+      if(!Article) {
+        res.status(404)
+      }
       return Article.find()
       .sort({ createdAt: 'descending' })
       .then((articles) => 
@@ -66,16 +69,26 @@ module.exports = ({ mongoose, articlevalidation}) => {
       //TODO validate query.id
       return Article.findByIdAndRemove(req.query.id)
       .then(result => {
-        res.status(200).json({status: `successfully deleted Article with given id: ${req.query.id}` })
+        res.status(200).json({status: `successfully deleted Article: ID: ${result.id},  TITLE: ${result.title}, ARTICLE_BODY: ${result.articleBody}`})
       }).catch(err => {
         console.log(`unable to deleteArticle with provided ID`, err)
       });
     },
 
-    // editByID: (req, res, next) => {
-    //  // findArticleByID(req, res, next);
-    //   res.status(200).json({article: req.article})
-    // },
+    editByTitle: (req, res, next) => {
+      const Article = mongoose.model('Article');
+      const title = req.query.title;
+      const { body } = req; 
+      // this is not working
+      //articlevalidation.isvaid(body);
+      if(typeof body.title !== 'undefined') {
+        console.log('working')
+        req.article.title = body.title;
+      } else {
+        throw new Error('post body needs a title')
+      }
+      res.status(200).json({status: title});
+    },
 
   }
 };
