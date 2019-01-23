@@ -1,4 +1,3 @@
-
 module.exports = ({ mongoose, articlevalidation}) => { 
   return {
 
@@ -81,12 +80,31 @@ module.exports = ({ mongoose, articlevalidation}) => {
       const { body } = req; 
       // this is not working
       //articlevalidation.isvaid(body);
+      let article = new Object;
+      console.log(body.title)
       if(typeof body.title !== 'undefined') {
-        console.log('working')
-        req.article.title = body.title;
+        article.title = body.title;
+        //article.title = body.title;
       } else {
-        throw new Error('post body needs a title')
+        throw new Error('POST req body needs a title')
       }
+      if(typeof body.articleBody !== 'undefined') {
+        article.articleBody = body.articleBody;
+      } else {
+        throw new Error('POST req needs an articleBody')
+      }
+      if(typeof body.author !== 'undefined') {
+        article.author = body.author;
+      } else {
+        throw new Error('POST req needs an author')
+      }
+
+
+
+      console.log(article)
+      //add whitespace where see %
+    //find the article with that title 
+    //replace the article with that title with the new article object
       res.status(200).json({status: title});
     },
 

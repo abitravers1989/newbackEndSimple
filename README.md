@@ -26,8 +26,9 @@ GET
 
 POST
 
-- http://localhost:3000/api/postArticles
+- http://localhost:3000/api/postArticles?title=test%title
 example body for this post request: {"title": "Test title", "author": "Abi", "articleBody": "Test desc"}
+...in body make sure selected raw input and JSON formatt...
 
 DELETE 
 - http://localhost:3000/api/id?id=5c1938eab5c54772905d0b26

@@ -1,5 +1,7 @@
 module.exports = () => { 
     return {
+
+      //TODO validation to check title is unique 
       isvaid: (bodyOfrequest) => {
         try {
           if(!bodyOfrequest.title) {
