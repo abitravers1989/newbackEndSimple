@@ -1,6 +1,6 @@
 module.exports = ({ mongoose, articlevalidation}) => { 
   return {
-
+//TODO ADD CREATEDAT TO SCHEMA 
     create: (req, res) => {
       const { body } = req;  
       articlevalidation.isvaid(body);
@@ -75,38 +75,55 @@ module.exports = ({ mongoose, articlevalidation}) => {
     },
 
     editByTitle: (req, res, next) => {
-      const Article = mongoose.model('Article');
-      const title = req.query.title;
-      const { body } = req; 
-      // this is not working
-      //articlevalidation.isvaid(body);
-      let article = new Object;
-      console.log(body.title)
-      if(typeof body.title !== 'undefined') {
-        article.title = body.title;
-        //article.title = body.title;
-      } else {
+      const requestTitle = req.query.title;
+      const { body } = req;
+      const { title, articleBody, author } = body;
+
+      if(title === 'undefined') {
+        //err is already an error so doesn't need wrapping
         throw new Error('POST req body needs a title')
       }
-      if(typeof body.articleBody !== 'undefined') {
-        article.articleBody = body.articleBody;
-      } else {
+      if(articleBody === 'undefined') {
         throw new Error('POST req needs an articleBody')
       }
-      if(typeof body.author !== 'undefined') {
-        article.author = body.author;
-      } else {
+      if(author === 'undefined') {
         throw new Error('POST req needs an author')
       }
 
-
-
-      console.log(article)
-      //add whitespace where see %
+      const Article = mongoose.model('Article');
+      const newArticle = new Article({ title, articleBody, author});
+      
+      Article.find({title: requestTitle})
+      .sort({ createdAt: 'descending' })
+      .then((articles) => {
+        if (!articles[0]) {
+          console.log('----->', "No Article found with that title")
+          return res.json({status: 'No Article found with that title. Please ensure it exists.'});
+        } else { 
+          Article.findOneAndUpdate({requestTitle}, {newArticle}, (err, doc) => { 
+            if(err) {
+              console.error('Error updating article:', title, err)
+            } else {
+              return res.json({status: 'Successfully updates the article:', requestTitle, newArticle})
+            }
+          });
+        }
+      }).catch(err => {
+        console.log('Unable to find and update given article', err)
+      });
     //find the article with that title 
     //replace the article with that title with the new article object
-      res.status(200).json({status: title});
-    },
+    },   
 
+    deleteAll: (req, res) => {
+      const Article = mongoose.model('Article');
+      Article.remove({}, err => {
+        if(err) {
+          throw new Error('Error deleting all the articles', err)
+        } else {
+          res.end('deleted all articles in the collection')
+        }
+      })
+    },
   }
 };

@@ -2,6 +2,9 @@
 
 `npm run start`
 
+must be running mongod locally
+TODO: dockarise the app and mongo
+
 ## To Test 
 
 `npm run test:unit`
@@ -32,12 +35,19 @@ example body for this post request: {"title": "Test title", "author": "Abi", "ar
 
 DELETE 
 - http://localhost:3000/api/id?id=5c1938eab5c54772905d0b26
+- http://localhost:3000/api/deleteAll
 
 PUT
 - 
+
+
+
+//TESTING ---- not contact based ... don't assert when do x then do x ... assert that when something happens get an empty response etc.
 
 ## Resources Used
 
 https://blog.cloudboost.io/learn-how-to-create-a-simple-blog-with-react-node-c05fa6889de3
 
 For testing: https://scotch.io/tutorials/how-to-test-nodejs-apps-using-mocha-chai-and-sinonjs
+
+
