@@ -5,14 +5,25 @@ module.exports = ({ mongoose, articlevalidation}) => {
       const { body } = req;  
       articlevalidation.isvaid(body);
       const { title, articleBody, author } = body;
-      const Article = mongoose.model('Article'); 
-      const articleData = new Article({ title, articleBody, author});
-      articleData.save().then(result => {
-        console.log('saved')
-      }).catch(err => {
-        console.log('unable to save')
-      }); 
-      res.status(200).json({ status: 'successfully posted:', title, articleBody, author });
+      const Article = mongoose.model('Article');
+      Article.findOne({title}, (err, article) => {
+        if(err) {
+          res.status(404).json({error: err});
+          return next(error);
+        };
+        if(!article){
+          //promisify
+          const newArticleData = new Article({ title, articleBody, author});
+          newArticleData.save().then(result => {
+            console.log('saved')
+          }).catch(err => {
+            console.log('unable to save')
+          }); 
+         res.status(200).json({ status: 'successfully posted:', title, articleBody, author });
+        } else {
+          res.status(400).json({Error: 'To post an article it must have a unique title'})
+        }
+      })
     },
 
     get: (req, res, next) => {
@@ -100,10 +111,11 @@ module.exports = ({ mongoose, articlevalidation}) => {
           console.log('----->', "No Article found with that title")
           return res.json({status: 'No Article found with that title. Please ensure it exists.'});
         } else { 
-          Article.findOneAndUpdate({requestTitle}, {newArticle}, (err, doc) => { 
+          Article.findOneAndUpdate({requestTitle}, {newArticle}, (err, article) => { 
             if(err) {
               console.error('Error updating article:', title, err)
             } else {
+              //or article
               return res.json({status: 'Successfully updates the article:', requestTitle, newArticle})
             }
           });
@@ -111,8 +123,6 @@ module.exports = ({ mongoose, articlevalidation}) => {
       }).catch(err => {
         console.log('Unable to find and update given article', err)
       });
-    //find the article with that title 
-    //replace the article with that title with the new article object
     },   
 
     deleteAll: (req, res) => {
