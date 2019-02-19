@@ -4,7 +4,8 @@ module.exports = ({mongoose}) => ({
               title: String,
               articleBody: String,
               author: String,
-            });
+            },
+            {timestamps: true});
           const Article = mongoose.model('Article', articlesSchema);
           return Article;
       }
