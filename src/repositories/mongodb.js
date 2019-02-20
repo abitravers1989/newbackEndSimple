@@ -3,15 +3,14 @@ module.exports = () => {
     connect: () => {
       try {
         const mongoose = require('mongoose')
-        const unique = new mongoose.constructor()
-        unique.connect(
+        mongoose.connect(
           'mongodb://localhost:27017/blogSite',
           { useNewUrlParser: true }
         )
         // mongoose.Promise = global.Promise
-        unique.set('debug', true)
+        mongoose.set('debug', true)
         // Get the default connection
-        const db = unique.connection
+        const db = mongoose.connection
         // bind the connection to an error event to get notifications of connection errors
         db.on('error', console.error.bind(console, 'MongoDB connection error:'))
         // return db;

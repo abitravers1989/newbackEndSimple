@@ -1,30 +1,16 @@
 module.exports = () => {
   return {
     // TODO validation to check title is unique
-    isvaid: (bodyOfrequest, res) => {
+    isvaid: bodyOfrequest => {
       try {
-        if (!bodyOfrequest.title) {
-          return res.status(422).json({
-            error: {
-              title: 'is required'
-            }
-          })
+        if (
+          !bodyOfrequest.title ||
+          !bodyOfrequest.articleBody ||
+          !bodyOfrequest.author
+        ) {
+          return false
         }
-        if (!bodyOfrequest.articleBody) {
-          return res.status(422).json({
-            error: {
-              articleBody: 'is required'
-            }
-          })
-        }
-        if (!bodyOfrequest.author) {
-          return res.status(422).json({
-            error: {
-              author: 'is required'
-            }
-          })
-        }
-        return bodyOfrequest
+        return true
       } catch (err) {
         return new Error('title, postBody and author must be in the post body')
       }

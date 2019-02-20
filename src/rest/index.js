@@ -21,7 +21,7 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
             //DELETE  http://localhost:3000/api/id?id=5c1938eab5c54772905d0b26
             app.delete('/api/id', articleEndpoint.deleteArticlebyID);
 
-            //PUT  http://localhost:3000/api/editArticle
+            //PUT  http://localhost:3000/api/editArticle?title=Test title
             app.put('/api/editArticle', articleEndpoint.editByTitle);
 
             //DELETE  http://localhost:3000/api/deleteAll

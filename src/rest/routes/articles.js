@@ -2,9 +2,15 @@ module.exports = ({ mongoose, articlevalidation }) => {
   return {
     create: (req, res, next) => {
       const { body } = req
-      articlevalidation.isvaid(body, res)
       const { title, articleBody, author } = body
       const Article = mongoose.model('Article')
+      if (!articlevalidation.isvaid(body)) {
+        res.status(422).json({
+          error: {
+            message: 'A valid article must be posted'
+          }
+        })
+      }
       Article.findOne({ title }, (err, article) => {
         if (err) {
           res.status(404).json({ error: err })
@@ -35,9 +41,8 @@ module.exports = ({ mongoose, articlevalidation }) => {
       })
     },
 
-    get: (req, res, next) => {
+    get: (req, res) => {
       const Article = mongoose.model('Article')
-      console.log('----->', Article)
       if (!Article) {
         res.status(404)
       }
@@ -73,7 +78,7 @@ module.exports = ({ mongoose, articlevalidation }) => {
       return Article.findById(idFromReq, (err, article) => {
         if (err) {
           res.status(404).json({ error: err })
-          return next(error)
+          return next(err)
         }
         if (!article) {
           return next(new Error('Article not found'))
@@ -101,7 +106,7 @@ module.exports = ({ mongoose, articlevalidation }) => {
         })
     },
 
-    editByTitle: (req, res, next) => {
+    editByTitle: (req, res) => {
       const requestTitle = req.query.title
       const { body } = req
       const { title, articleBody, author } = body
