@@ -1,6 +1,6 @@
 module.exports = ({ mongoose, articlevalidation }) => {
   return {
-    create: (req, res, next) => {
+    create: (req, res) => {
       const { body } = req
       const { title, articleBody, author } = body
       const Article = mongoose.model('Article')
@@ -11,34 +11,28 @@ module.exports = ({ mongoose, articlevalidation }) => {
           }
         })
       }
-      Article.findOne({ title }, (err, article) => {
-        if (err) {
-          res.status(404).json({ error: err })
-          return next(err)
-        }
-        if (!article) {
-          // promisify
-          const newArticleData = new Article({ title, articleBody, author })
-          // const newArticleData = new articleSchema({ title, articleBody, author});
-          newArticleData
-            .save()
-            .then(result => {
-              console.log('Saved:', result)
-            })
-            .catch(error => {
-              console.log('Encountered an error while saving:', error)
-            })
-          return res.status(200).json({
-            status: 'successfully posted:',
-            title,
-            articleBody,
-            author
+      if (articlevalidation.isUnique(title)) {
+        // promisify
+        const newArticleData = new Article({ title, articleBody, author })
+        // const newArticleData = new articleSchema({ title, articleBody, author});
+        newArticleData
+          .save()
+          .then(result => {
+            console.log('Saved:', result)
           })
-        }
-        return res
-          .status(400)
-          .json({ Error: 'To post an article it must have a unique title' })
-      })
+          .catch(error => {
+            console.log('Encountered an error while saving:', error)
+          })
+        return res.status(200).json({
+          status: 'successfully posted:',
+          title,
+          articleBody,
+          author
+        })
+      }
+      return res
+        .status(400)
+        .json({ Error: 'To post an article it must have a unique title' })
     },
 
     get: (req, res) => {
