@@ -6,6 +6,7 @@ const winston = require('winston')
 const { promisify } = require('util')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const sanitise = require('mongo-sanitize')
 // const helmet = require('helmet');
 // const cors = require('cors');
 
@@ -37,8 +38,9 @@ try {
 
 // mongo database specific dependencies
 container.register({
-  mongoose: asFunction(() => mongoose).singleton()
-  //   mongodb: asFunction(mongodb).singleton(),
+  mongoose: asFunction(() => mongoose).singleton(),
+  mongodb: asFunction(mongodb).singleton(),
+  articleSchema: asFunction(articleSchema).singleton()
 })
 
 // external dependencies
@@ -47,21 +49,21 @@ container.register({
   morgan: asValue(morgan),
   logger: asValue(winston),
   promisify: asValue(promisify),
-  bodyParser: asValue(bodyParser)
+  bodyParser: asValue(bodyParser),
+  sanitise: asFunction(() => sanitise)
   // helmet: asValue(helmet),
   // cors: asValue(cors),
 })
 
 // application files
 container.register({
-  mongodb: asFunction(mongodb).singleton(),
-  articleSchema: asFunction(articleSchema).singleton(),
   healthEndpoint: asFunction(healthEndpoint),
   envVariables: asValue(envVariables),
   articleEndpoint: asFunction(articleEndpoint),
   server: asFunction(server).singleton(),
   routes: asFunction(routes),
-  articlevalidation: asFunction(articlevalidation)
+  articlevalidation: asFunction(articlevalidation),
+  getEnvVar: asValue(getEnvVar)
 })
 
 module.exports = container.cradle

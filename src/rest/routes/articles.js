@@ -1,9 +1,14 @@
-module.exports = ({ mongoose, articlevalidation }) => {
+module.exports = ({ mongoose, articlevalidation, sanitise }) => {
   return {
     create: (req, res) => {
+      // console.log('----->', sanitise(req.body))
+      // const body = sanitise(req.body)
       const { body } = req
+      const { password } = req.headers
+      // console.log('----->eq.headers', req.headers.password)
       const { title, articleBody, author } = body
       const Article = mongoose.model('Article')
+
       if (!articlevalidation.isvaid(body)) {
         res.status(422).json({
           error: {
@@ -11,7 +16,16 @@ module.exports = ({ mongoose, articlevalidation }) => {
           }
         })
       }
-      if (articlevalidation.isUnique(title)) {
+      // this isnt working
+      console.log(
+        '----->TRUE OR NOT?????????',
+        articlevalidation.isUnique(title, Article)
+      )
+      if (
+        articlevalidation.isUnique(title, Article) &&
+        articlevalidation.isValidPassword(password)
+      ) {
+        console.log('-----> HERERRERETRR??')
         // promisify
         const newArticleData = new Article({ title, articleBody, author })
         // const newArticleData = new articleSchema({ title, articleBody, author});
@@ -24,7 +38,7 @@ module.exports = ({ mongoose, articlevalidation }) => {
             console.log('Encountered an error while saving:', error)
           })
         return res.status(200).json({
-          status: 'successfully posted:',
+          status: 'Successfully posted:',
           title,
           articleBody,
           author
@@ -102,46 +116,51 @@ module.exports = ({ mongoose, articlevalidation }) => {
 
     editByTitle: (req, res) => {
       const requestTitle = req.query.title
-      const { body } = req
+
+      const body = sanitise(req.body)
       const { title, articleBody, author } = body
 
-      if (title === 'undefined') {
-        // err is already an error so doesn't need wrapping
-        throw new Error('POST req body needs a title')
-      }
-      if (articleBody === 'undefined') {
-        throw new Error('POST req needs an articleBody')
-      }
-      if (author === 'undefined') {
-        throw new Error('POST req needs an author')
+      if (!articlevalidation.isvaid(body)) {
+        res.status(422).json({
+          error: {
+            message: 'A valid article must be posted'
+          }
+        })
       }
 
       const Article = mongoose.model('Article')
       const newArticle = { title, articleBody, author }
 
-      Article.find({ title: requestTitle })
-        .sort({ createdAt: 'descending' })
+      // have to find and then save
+      // Article.findOne({})
+      Article.findOne({ title: requestTitle })
+        // .sort({ createdAt: 'descending' })
         .then(articles => {
-          if (!articles[0]) {
-            console.log('----->', 'No Article found with that title')
+          console.log('----->Article is', articles)
+          if (!articles) {
+            // console.log('----->', 'No Article found with that title')
             return res.json({
               status:
                 'No Article found with that title. Please ensure it exists.'
             })
           }
           console.log('----->', newArticle)
-          Article.findOneAndUpdate(requestTitle, newArticle, (err, article) => {
-            if (err) {
-              console.error('Error updating article:', title, err)
-            } else {
-              // or article
-              return res.json({
-                status: 'Successfully updates the article:',
-                article
-              })
-              // return res.json({status: 'Successfully updates the article:', requestTitle, newArticle})
+          Article.findOneAndUpdate(
+            { title: requestTitle },
+            newArticle,
+            (err, article2) => {
+              if (err) {
+                console.error('Error updating article:', title, err)
+              } else {
+                // or article
+                return res.json({
+                  status: 'Successfully updates the article:',
+                  article2
+                })
+                // return res.json({status: 'Successfully updates the article:', requestTitle, newArticle})
+              }
             }
-          })
+          )
         })
         .catch(err => {
           console.log('Unable to find and update given article', err)

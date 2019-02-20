@@ -1,4 +1,4 @@
-module.exports = mongoose => {
+module.exports = getEnvVar => {
   return {
     // TODO validation to check title is unique
     isvaid: bodyOfrequest => {
@@ -16,21 +16,27 @@ module.exports = mongoose => {
       }
     },
 
-    isUnique: title => {
-      try {
-        const Article = mongoose.model('Article')
-        return Article.findOne({ title }, (err, article) => {
-          if (err) {
-            return new Error('There is an issue with the findOne method:', err)
-          }
-          if (!article) {
-            return true
-          }
-          return false
-        })
-      } catch (err) {
-        return new Error('Article must be unquie')
-      }
+    isUnique: (title, Article) => {
+      // const Article = mongoose.model('Article')
+      // console.log('----->Article', Article)
+      Article.findOne({ title }, (err, article) => {
+        if (err) {
+          return new Error('There is an issue with the findOne method:', err)
+        }
+        if (!article) {
+          return true
+          // return (result = true)
+        }
+        console.log('----->FALSSSSE')
+        return false
+        // return (result = false)
+      })
+
+      // oputput true or false ???
+    },
+
+    isValidPassword: password => {
+      return password === getEnvVar('USER_PASSWORD')
     }
   }
 }
