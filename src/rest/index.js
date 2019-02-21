@@ -15,7 +15,7 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
       // POST  http://localhost:3000/api/postArticles
       app.post('/api/postArticles', articleEndpoint.create)
 
-      // http://localhost:3000/api/getArticle?id=5c260405b72fac1f24283e89
+      // http://localhost:3000/api/getArticle?id=5c6ee6e6c7ce4832513c9c28
       app.get('/api/getArticle', articleEndpoint.getbyId)
 
       // DELETE  http://localhost:3000/api/id?id=5c1938eab5c54772905d0b26

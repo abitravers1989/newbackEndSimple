@@ -57,45 +57,22 @@ module.exports = ({ mongoose, articlevalidation, sanitise }) => {
       )
     },
 
-    // TODO refactor this out so can be used twice. app.param should be used
-    // findArticleByID: (req, res, next) => {
-    //   const Article = mongoose.model('Article');
-    //   const idFromReq = req.query.id;
-    //   return Article.findById(idFromReq, (err, article) => {
-    //     if(err) {
-    //       return res.status(404).json({error: err})
-    //     } else if (article) {
-    //       req.article = article;
-    //       // const art = req.article
-    //       // res.status(200).json({art})
-    //       return next();
-    //     }
-    //   });
-    // },
-
-    getbyId: (req, res, next) => {
+    getbyId: (req, res) => {
       const Article = mongoose.model('Article')
-      const idFromReq = req.query.id
-      return Article.findById(idFromReq, (err, article) => {
+      return Article.findById(req.query.id, (err, article) => {
         if (err) {
-          res.status(404).json({ error: err })
-          return next(err)
+          return res.status(400).json({ Error: err })
         }
         if (!article) {
-          return next(new Error('Article not found'))
+          return res.status(404).json({ Error: 'Article not found' })
         }
-        if (article) {
-          res.status(200).json({ article })
-          return next()
-        }
+        return res.status(200).json({ article })
       })
     },
 
-    // add get by title
-
     deleteArticlebyID: (req, res) => {
       const Article = mongoose.model('Article')
-      // TODO validate query.id
+      // TODO add authentication
       return Article.findByIdAndRemove(req.query.id)
         .then(result => {
           res.status(200).json({
@@ -108,6 +85,8 @@ module.exports = ({ mongoose, articlevalidation, sanitise }) => {
           console.log(`unable to deleteArticle with provided ID`, err)
         })
     },
+
+    // add get by title
 
     editByTitle: (req, res) => {
       const requestTitle = req.query.title
