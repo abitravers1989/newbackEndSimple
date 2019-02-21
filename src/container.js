@@ -29,7 +29,8 @@ let envVariables
 try {
   envVariables = {
     // if PORT isn't avlaible defaults to 3000`
-    PORT: getEnvVar('PORT', 3000)
+    PORT: getEnvVar('PORT', 3000),
+    USER_PASSWORD: getEnvVar('USER_PASSWORD')
   }
 } catch (err) {
   console.log('A fatel error occured while fetching env variables:', err)
@@ -62,8 +63,7 @@ container.register({
   articleEndpoint: asFunction(articleEndpoint),
   server: asFunction(server).singleton(),
   routes: asFunction(routes),
-  articlevalidation: asFunction(articlevalidation),
-  getEnvVar: asValue(getEnvVar)
+  articlevalidation: asFunction(articlevalidation)
 })
 
 module.exports = container.cradle

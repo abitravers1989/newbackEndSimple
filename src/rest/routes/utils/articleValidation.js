@@ -1,4 +1,4 @@
-module.exports = getEnvVar => {
+module.exports = ({ envVariables }) => {
   return {
     // TODO validation to check title is unique
     isvaid: bodyOfrequest => {
@@ -17,16 +17,15 @@ module.exports = getEnvVar => {
     },
 
     isUnique: async (title, Article) => {
-      const car = await Article.findOne({ title })
-      console.log('----->CAR', car)
-      if (car) {
+      const existentArticle = await Article.findOne({ title })
+      if (existentArticle) {
         return false
       }
       return true
-    }
+    },
 
-    // isValidPassword: password => {
-    //   return password === getEnvVar('USER_PASSWORD')
-    // }
+    isValidPassword: password => {
+      return password === envVariables.USER_PASSWORD
+    }
   }
 }
