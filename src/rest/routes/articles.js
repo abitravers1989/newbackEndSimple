@@ -33,20 +33,26 @@ module.exports = ({ mongoose, articlevalidation, sanitise }) => {
       })
     },
 
-    get: (req, res) => {
+    getAll: (req, res) => {
       const Article = mongoose.model('Article')
       if (!Article) {
         res.status(404).send('Article collection not found')
       }
       return (
         Article.find()
-          // change to created at
-          .sort({ title: 1 })
+          // Sort so the last Article posted will be first in the list
+          .sort({ createdAt: -1 })
           .then(articles =>
             res.json({ articles: articles.map(article => article.toJSON()) })
           )
           .catch(err => {
-            console.log('unable to get all articles because', err)
+            res.status(400).json(
+              {
+                Error:
+                  'Encountered an error while attempting to fetch all articles:'
+              },
+              { GivenError: err }
+            )
           })
       )
     },

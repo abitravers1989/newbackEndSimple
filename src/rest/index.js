@@ -1,43 +1,42 @@
 module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
-    setupEndpoints: (app) => {
-        try {
-            //LIVELINESS & READINESS ENDPOINTS
-            //http://localhost:3000/api/readiness
-            app.get('/api/readiness', healthEndpoint.readiness);
+  setupEndpoints: app => {
+    try {
+      // LIVELINESS & READINESS ENDPOINTS
+      // http://localhost:3000/api/readiness
+      app.get('/api/readiness', healthEndpoint.readiness)
 
-            //http://localhost:3000/api/liveness
-            app.get('/api/liveness', healthEndpoint.liveness);
+      // http://localhost:3000/api/liveness
+      app.get('/api/liveness', healthEndpoint.liveness)
 
-            //ARTICLE ENDPOINTS
-            //http://localhost:3000/api/getAllArticles
-            app.get('/api/getAllArticles', articleEndpoint.get);
+      // ARTICLE ENDPOINTS
+      // http://localhost:3000/api/getAllArticles
+      app.get('/api/getAllArticles', articleEndpoint.getAll)
 
-            //POST  http://localhost:3000/api/postArticles
-            app.post('/api/postArticles', articleEndpoint.create);
+      // POST  http://localhost:3000/api/postArticles
+      app.post('/api/postArticles', articleEndpoint.create)
 
-            //http://localhost:3000/api/getArticle?id=5c260405b72fac1f24283e89
-            app.get('/api/getArticle', articleEndpoint.getbyId);
+      // http://localhost:3000/api/getArticle?id=5c260405b72fac1f24283e89
+      app.get('/api/getArticle', articleEndpoint.getbyId)
 
-            //DELETE  http://localhost:3000/api/id?id=5c1938eab5c54772905d0b26
-            app.delete('/api/id', articleEndpoint.deleteArticlebyID);
+      // DELETE  http://localhost:3000/api/id?id=5c1938eab5c54772905d0b26
+      app.delete('/api/id', articleEndpoint.deleteArticlebyID)
 
-            //PUT  http://localhost:3000/api/editArticle?title=Test title
-            app.put('/api/editArticle', articleEndpoint.editByTitle);
+      // PUT  http://localhost:3000/api/editArticle?title=Test title
+      app.put('/api/editArticle', articleEndpoint.editByTitle)
 
-            //DELETE  http://localhost:3000/api/deleteAll
-            app.delete('/api/deleteAll', articleEndpoint.deleteAll)
+      // DELETE  http://localhost:3000/api/deleteAll
+      app.delete('/api/deleteAll', articleEndpoint.deleteAll)
 
-            //TODO refactor this into utils middleware 
-            app.use((err, req, res, next) => {
-                res.status(err.status || 500).json({
-                    message: err.message,
-                    error: err
-                });
-            });
-
-        } catch (err) {
-            console.log('error setting up routes', err)
-            logger.error(err, 'Failed to setup app routes');
-        }
+      // TODO refactor this into utils middleware
+      app.use((err, req, res) => {
+        res.status(err.status || 500).json({
+          message: err.message,
+          error: err
+        })
+      })
+    } catch (err) {
+      console.error('Error setting up routes', err)
+      logger.error(err, 'Failed to setup app routes')
     }
+  }
 })
