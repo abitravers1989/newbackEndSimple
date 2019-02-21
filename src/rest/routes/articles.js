@@ -6,29 +6,26 @@ module.exports = ({ mongoose, articlevalidation, sanitise }) => {
       const { title, articleBody, author } = body
       const Article = mongoose.model('Article')
 
-      if (!articlevalidation.isvaid(body)) {
-        res.status(422).json({
-          error: {
-            message: 'A valid article must be posted'
-          }
-        })
-      }
-
       const uniqueArticle = await articlevalidation.isUnique(title, Article)
       const userValid = articlevalidation.isValidPassword(password)
-      console.log('----->', userValid)
-      if (uniqueArticle) {
-        console.log('-----> HERERRERETRR??')
+      const articleValid = articlevalidation.isvaid(body)
+
+      if (uniqueArticle && userValid && articleValid) {
         // promisify
+        // add sanatize
         const newArticleData = new Article({ title, articleBody, author })
-        // const newArticleData = new articleSchema({ title, articleBody, author});
         newArticleData
           .save()
           .then(result => {
             console.log('Saved:', result)
           })
           .catch(error => {
-            console.log('Encountered an error while saving:', error)
+            res
+              .status(400)
+              .json(
+                { Error: 'Encountered an error while saving:' },
+                { GivenError: error }
+              )
           })
         return res.status(200).json({
           status: 'Successfully posted:',
@@ -37,9 +34,10 @@ module.exports = ({ mongoose, articlevalidation, sanitise }) => {
           author
         })
       }
-      return res
-        .status(400)
-        .json({ Error: 'To post an article it must have a unique title' })
+      return res.status(400).json({
+        Error:
+          'Post must be unique & valid with the correct password to be posted'
+      })
     },
 
     get: (req, res) => {
@@ -47,14 +45,17 @@ module.exports = ({ mongoose, articlevalidation, sanitise }) => {
       if (!Article) {
         res.status(404)
       }
-      return Article.find()
-        .sort({ title: 1 })
-        .then(articles =>
-          res.json({ articles: articles.map(article => article.toJSON()) })
-        )
-        .catch(err => {
-          console.log('unable to get all articles because', err)
-        })
+      return (
+        Article.find()
+          // change to created at
+          .sort({ title: 1 })
+          .then(articles =>
+            res.json({ articles: articles.map(article => article.toJSON()) })
+          )
+          .catch(err => {
+            console.log('unable to get all articles because', err)
+          })
+      )
     },
 
     // TODO refactor this out so can be used twice. app.param should be used
@@ -90,6 +91,8 @@ module.exports = ({ mongoose, articlevalidation, sanitise }) => {
         }
       })
     },
+
+    // add get by title
 
     deleteArticlebyID: (req, res) => {
       const Article = mongoose.model('Article')
