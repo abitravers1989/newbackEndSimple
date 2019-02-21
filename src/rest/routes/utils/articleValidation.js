@@ -16,27 +16,17 @@ module.exports = getEnvVar => {
       }
     },
 
-    isUnique: (title, Article) => {
-      // const Article = mongoose.model('Article')
-      // console.log('----->Article', Article)
-      Article.findOne({ title }, (err, article) => {
-        if (err) {
-          return new Error('There is an issue with the findOne method:', err)
-        }
-        if (!article) {
-          return true
-          // return (result = true)
-        }
-        console.log('----->FALSSSSE')
+    isUnique: async (title, Article) => {
+      const car = await Article.findOne({ title })
+      console.log('----->CAR', car)
+      if (car) {
         return false
-        // return (result = false)
-      })
-
-      // oputput true or false ???
-    },
-
-    isValidPassword: password => {
-      return password === getEnvVar('USER_PASSWORD')
+      }
+      return true
     }
+
+    // isValidPassword: password => {
+    //   return password === getEnvVar('USER_PASSWORD')
+    // }
   }
 }

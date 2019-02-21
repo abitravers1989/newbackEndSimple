@@ -1,6 +1,6 @@
 module.exports = ({ mongoose, articlevalidation, sanitise }) => {
   return {
-    create: (req, res) => {
+    create: async (req, res) => {
       // console.log('----->', sanitise(req.body))
       // const body = sanitise(req.body)
       const { body } = req
@@ -16,15 +16,8 @@ module.exports = ({ mongoose, articlevalidation, sanitise }) => {
           }
         })
       }
-      // this isnt working
-      console.log(
-        '----->TRUE OR NOT?????????',
-        articlevalidation.isUnique(title, Article)
-      )
-      if (
-        articlevalidation.isUnique(title, Article) &&
-        articlevalidation.isValidPassword(password)
-      ) {
+      const uniqueArticle = await articlevalidation.isUnique(title, Article)
+      if (uniqueArticle) {
         console.log('-----> HERERRERETRR??')
         // promisify
         const newArticleData = new Article({ title, articleBody, author })
