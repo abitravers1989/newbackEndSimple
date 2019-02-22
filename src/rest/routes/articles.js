@@ -1,7 +1,7 @@
 module.exports = ({ mongoose, articlevalidation, sanitise }) => {
   return {
     create: async (req, res) => {
-      const { body } = req
+      const body = sanitise(req.body)
       const { password } = req.headers
       const { title, articleBody, author } = body
       const Article = mongoose.model('Article')
@@ -11,7 +11,6 @@ module.exports = ({ mongoose, articlevalidation, sanitise }) => {
         articlevalidation.isValidPassword(password) &&
         articlevalidation.isvaid(body)
       ) {
-        // add sanatize
         const newArticleData = new Article({ title, articleBody, author })
         newArticleData.save().catch(error => {
           res
@@ -72,73 +71,63 @@ module.exports = ({ mongoose, articlevalidation, sanitise }) => {
 
     deleteArticlebyID: (req, res) => {
       const Article = mongoose.model('Article')
-      // TODO add authentication
-      return Article.findByIdAndRemove(req.query.id)
-        .then(result => {
-          res.status(200).json({
-            status: `successfully deleted Article: ID: ${result.id},  TITLE: ${
-              result.title
-            }, ARTICLE_BODY: ${result.articleBody}`
+
+      if (articlevalidation.isValidPassword(req.headers.password)) {
+        Article.findByIdAndRemove(req.query.id)
+          .then(result => {
+            return res.status(200).json({
+              status: `successfully deleted Article: ID: ${
+                result.id
+              },  TITLE: ${result.title}, ARTICLE_BODY: ${result.articleBody}`
+            })
           })
-        })
-        .catch(err => {
-          console.log(`unable to deleteArticle with provided ID`, err)
-        })
+          .catch(err => {
+            return res.status(400).json({ Error: err })
+          })
+      }
     },
 
     // add get by title
 
-    editByTitle: (req, res) => {
+    editByTitle: async (req, res) => {
       const requestTitle = req.query.title
-
       const body = sanitise(req.body)
       const { title, articleBody, author } = body
-
-      if (!articlevalidation.isvaid(body)) {
-        res.status(422).json({
-          error: {
-            message: 'A valid article must be posted'
-          }
-        })
-      }
-
       const Article = mongoose.model('Article')
       const newArticle = { title, articleBody, author }
 
-      // have to find and then save
-      // Article.findOne({})
-      Article.findOne({ title: requestTitle })
-        // .sort({ createdAt: 'descending' })
-        .then(articles => {
-          console.log('----->Article is', articles)
-          if (!articles) {
-            // console.log('----->', 'No Article found with that title')
-            return res.json({
-              status:
-                'No Article found with that title. Please ensure it exists.'
+      if (await articlevalidation.isUnique(requestTitle, Article)) {
+        res.status(400).json({
+          Error: 'Article does not exist in current database'
+        })
+      }
+
+      if (
+        (await articlevalidation.isUnique(title, Article)) &&
+        articlevalidation.isValidPassword(req.headers.password) &&
+        articlevalidation.isvaid(body)
+      ) {
+        Article.findOneAndUpdate(
+          { title: requestTitle },
+          newArticle,
+          (err, article) => {
+            if (err) {
+              return res.status(400).json({
+                Error: `Error updating article: ${err}`
+              })
+            }
+            return res.status(200).json({
+              status: 'Successfully updates the article:',
+              article
             })
           }
-          console.log('----->', newArticle)
-          Article.findOneAndUpdate(
-            { title: requestTitle },
-            newArticle,
-            (err, article2) => {
-              if (err) {
-                console.error('Error updating article:', title, err)
-              } else {
-                // or article
-                return res.json({
-                  status: 'Successfully updates the article:',
-                  article2
-                })
-                // return res.json({status: 'Successfully updates the article:', requestTitle, newArticle})
-              }
-            }
-          )
+        )
+      } else {
+        res.status(400).json({
+          Error:
+            'Password must be in the header of the request, the new title must be unique and the article must be valid.'
         })
-        .catch(err => {
-          console.log('Unable to find and update given article', err)
-        })
+      }
     },
 
     deleteAll: (req, res) => {

@@ -12,14 +12,14 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
       // http://localhost:3000/api/getAllArticles
       app.get('/api/getAllArticles', articleEndpoint.getAll)
 
-      // POST  http://localhost:3000/api/postArticles
+      // POST  http://localhost:3000/api/postArticles / include password in header
       app.post('/api/postArticles', articleEndpoint.create)
 
       // http://localhost:3000/api/getArticle?id=5c6ee6e6c7ce4832513c9c28
       app.get('/api/getArticle', articleEndpoint.getbyId)
 
-      // DELETE  http://localhost:3000/api/id?id=5c1938eab5c54772905d0b26
-      app.delete('/api/id', articleEndpoint.deleteArticlebyID)
+      // DELETE  http://localhost:3000/api/deleteOne?id=5c6ee62586852c3174ab9e8d / include password in header
+      app.delete('/api/deleteOne', articleEndpoint.deleteArticlebyID)
 
       // PUT  http://localhost:3000/api/editArticle?title=Test title
       app.put('/api/editArticle', articleEndpoint.editByTitle)
