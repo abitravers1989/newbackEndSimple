@@ -1,11 +1,11 @@
-## To Run 
+## To Run
 
 `npm run start`
 
 must be running mongod locally
 TODO: dockarise the app and mongo
 
-## To Test 
+## To Test
 
 `npm run test:unit`
 `npm run test:unit:watch`
@@ -16,11 +16,12 @@ All configuration is done using environment variables, the following are require
 
 - **PORT** - Port to run the server on. Defaults to 3000. _Optional_
 
-## Endpoints 
+## Endpoints
 
 After running it locally the following endpoints will be exposed:
 
 GET
+
 - http://localhost:3000/api/readiness
 - http://localhost:3000/api/liveness
 - http://localhost:3000/private/readiness
@@ -30,17 +31,17 @@ GET
 POST
 
 - http://localhost:3000/api/postArticles?title=test%title
-example body for this post request: {"title": "Test title", "author": "Abi", "articleBody": "Test desc"}
-...in body make sure selected raw input and JSON formatt...
+  example body for this post request: {"title": "Test title", "author": "Abi", "articleBody": "Test desc"}
+  ...in body make sure selected raw input and JSON formatt...
 
-DELETE 
+DELETE
+
 - http://localhost:3000/api/id?id=5c1938eab5c54772905d0b26
 - http://localhost:3000/api/deleteAll
 
 PUT
-- 
 
-
+- http://localhost:3000/api/editArticle?title=Test 3
 
 //TESTING ---- not contact based ... don't assert when do x then do x ... assert that when something happens get an empty response etc.
 
@@ -50,4 +51,13 @@ https://blog.cloudboost.io/learn-how-to-create-a-simple-blog-with-react-node-c05
 
 For testing: https://scotch.io/tutorials/how-to-test-nodejs-apps-using-mocha-chai-and-sinonjs
 
+# TODO
 
+done
+
+- replace mongoose with native driver
+- put end point
+- refactor findinding
+- only allow to add article if title is not already there
+
+- replacve cgls with logging
