@@ -21,7 +21,7 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
       // DELETE  http://localhost:3000/api/deleteOne?id=5c6ee62586852c3174ab9e8d / include password in header
       app.delete('/api/deleteOne', articleEndpoint.deleteArticlebyID)
 
-      // PUT  http://localhost:3000/api/editArticle?title=Test title
+      // PUT  http://localhost:3000/api/editArticle?title=Test title / include password in header
       app.put('/api/editArticle', articleEndpoint.editByTitle)
 
       // DELETE  http://localhost:3000/api/deleteAll
@@ -35,7 +35,7 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
         })
       })
     } catch (err) {
-      console.error('Error setting up routes', err)
+      //   console.error('Error setting up routes', err)
       logger.error(err, 'Failed to setup app routes')
     }
   }
