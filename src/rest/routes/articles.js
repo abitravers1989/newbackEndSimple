@@ -136,7 +136,7 @@ module.exports = ({ mongoose, articlevalidation, sanitise }) => {
         if (err) {
           throw new Error('Error deleting all the articles', err)
         } else {
-          res.end('deleted all articles in the collection')
+          res.end('Deleted all articles in the collection')
         }
       })
     }
