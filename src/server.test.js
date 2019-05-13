@@ -1,6 +1,6 @@
 const serverFactory = require('./server');
 
-describe('server', () => {
+describe.only('server', () => {
   const sandbox = sinon.createSandbox();
 
   const dependencies = {
@@ -19,6 +19,12 @@ describe('server', () => {
     },
     routes: {
       setupEndpoints: sinon.spy(),
+    },
+    mongodb: {
+      connect: () => {},
+    },
+    articleSchema: {
+      createArticleSchema: () => {},
     },
   };
 
