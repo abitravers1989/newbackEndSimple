@@ -16,10 +16,10 @@ module.exports = ({ healthEndpoint, articleEndpoint, logger }) => ({
       app.post('/api/postArticles', articleEndpoint.create)
 
       // http://localhost:3000/api/getArticle?id=5c6ee6e6c7ce4832513c9c28
-      app.get('/api/getArticle', articleEndpoint.getbyId)
+      app.get('/api/getArticle', articleEndpoint.getById)
 
       // DELETE  http://localhost:3000/api/deleteOne?id=5c6ee62586852c3174ab9e8d / include password in header
-      app.delete('/api/deleteOne', articleEndpoint.deleteArticlebyID)
+      app.delete('/api/deleteOne', articleEndpoint.deleteArticleByID)
 
       // PUT  http://localhost:3000/api/editArticle?title=Test title / include password in header
       app.put('/api/editArticle', articleEndpoint.editByTitle)

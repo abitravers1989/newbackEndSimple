@@ -1,15 +1,15 @@
-module.exports = ({ mongoose, articlevalidation, sanitise }) => {
+module.exports = ({ mongoose, articleValidation }) => {
   return {
     create: async (req, res) => {
-      const body = sanitise(req.body)
+      const { body } = req.body;
       const { password } = req.headers
       const { title, articleBody, author } = body
       const Article = mongoose.model('Article')
 
       if (
-        (await articlevalidation.isUnique(title, Article)) &&
-        articlevalidation.isValidPassword(password) &&
-        articlevalidation.isvaid(body)
+        (await articleValidation.isUnique(title, Article)) &&
+        articleValidation.isValidPassword(password) &&
+        articleValidation.isValid(body)
       ) {
         const newArticleData = new Article({ title, articleBody, author })
         newArticleData.save().catch(error => {
@@ -56,7 +56,7 @@ module.exports = ({ mongoose, articlevalidation, sanitise }) => {
       )
     },
 
-    getbyId: (req, res) => {
+    getById: (req, res) => {
       const Article = mongoose.model('Article')
       return Article.findById(req.query.id, (err, article) => {
         if (err) {
@@ -69,10 +69,10 @@ module.exports = ({ mongoose, articlevalidation, sanitise }) => {
       })
     },
 
-    deleteArticlebyID: (req, res) => {
+    deleteArticleByID: (req, res) => {
       const Article = mongoose.model('Article')
 
-      if (articlevalidation.isValidPassword(req.headers.password)) {
+      if (articleValidation.isValidPassword(req.headers.password)) {
         Article.findByIdAndRemove(req.query.id)
           .then(result => {
             return res.status(200).json({
@@ -91,21 +91,21 @@ module.exports = ({ mongoose, articlevalidation, sanitise }) => {
 
     editByTitle: async (req, res) => {
       const requestTitle = req.query.title
-      const body = sanitise(req.body)
+      const {body} = req.body
       const { title, articleBody, author } = body
       const Article = mongoose.model('Article')
       const newArticle = { title, articleBody, author }
 
-      if (await articlevalidation.isUnique(requestTitle, Article)) {
+      if (await articleValidation.isUnique(requestTitle, Article)) {
         res.status(400).json({
           Error: 'Article does not exist in current database'
         })
       }
 
       if (
-        (await articlevalidation.isUnique(title, Article)) &&
-        articlevalidation.isValidPassword(req.headers.password) &&
-        articlevalidation.isvaid(body)
+        (await articleValidation.isUnique(title, Article)) &&
+        articleValidation.isValidPassword(req.headers.password) &&
+        articleValidation.isValid(body)
       ) {
         Article.findOneAndUpdate(
           { title: requestTitle },

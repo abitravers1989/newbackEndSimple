@@ -1,12 +1,12 @@
 module.exports = ({ envVariables }) => {
   return {
     // TODO validation to check title is unique
-    isvaid: bodyOfrequest => {
+    isValid: bodyOfRequest => {
       try {
         if (
-          !bodyOfrequest.title ||
-          !bodyOfrequest.articleBody ||
-          !bodyOfrequest.author
+          !bodyOfRequest.title ||
+          !bodyOfRequest.articleBody ||
+          !bodyOfRequest.author
         ) {
           return false
         }

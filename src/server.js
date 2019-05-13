@@ -1,67 +1,42 @@
 module.exports = ({
   app,
   envVariables,
-  morgan,
   logger,
   routes,
-  bodyParser,
-  promisify,
+  middleware,
   mongodb,
-  articleSchema
+  articleSchema,
 }) => {
-  let server
+  let server;
+
   return {
     start: () => {
       try {
-        app.use(
-          morgan('dev', {
-            skip: (req, res) => {
-              return res.statusCode < 400
-            },
-            stream: process.stderr
-          })
-        )
+        middleware.init();
+        routes.setupEndpoints(app);
+        
+        // Database setup
+        mongodb.connect();
+        articleSchema.createArticleSchema();
 
-        app.use(
-          morgan('dev', {
-            skip: (req, res) => {
-              return res.statusCode >= 400
-            },
-            stream: process.stdout
-          })
-        )
-
-        app.use(bodyParser.json())
-        app.use(bodyParser.urlencoded({ extended: true }))
-        // app.use(cors());
-
-        // add routes
-        routes.setupEndpoints(app)
-
-        // connect to the database
-        mongodb.connect()
-
-        // create the schema
-        articleSchema.createArticleSchema()
-
-        // startup the server
+        // Start server
         server = app.listen(envVariables.PORT, () => {
-          logger.info(`listening on port ${server.address().port}`)
-        })
+          logger.info(`listening on port ${server.address().port}`);
+        });
       } catch (err) {
-        logger.error(err, 'Failed to start server')
-        process.exit(1)
+        logger.error(err, 'Failed to start server');
+        process.exit(1);
       }
-      return server
+      return server;
     },
-    stop: async () => {
+    stop: () => {
       try {
-        await promisify(server.close).call(server)
-        logger.info('Shutting down the server successfully')
-      } catch (err) {
-        logger.error({ err }, 'Forcing server to shut down')
-        process.exit(1)
+        server.close();
+        logger.info('Shutting down the service gracefully');
+      } catch (error) {
+        logger.error(error, 'Forcing server to shut down');
+        process.exit(1);
       }
-    }
-  }
-}
+    },
+  };
+};

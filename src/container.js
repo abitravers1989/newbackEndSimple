@@ -1,69 +1,74 @@
-// external dependencies
-const { createContainer, asFunction, asValue } = require('awilix')
-const app = require('express')
-const morgan = require('morgan')
-const winston = require('winston')
-const { promisify } = require('util')
-const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
-const sanitise = require('mongo-sanitize')
-// const helmet = require('helmet');
-// const cors = require('cors');
+const { createContainer, asFunction, asValue } = require('awilix');
 
-// internal files
-const getEnvVar = require('./utils/getEnvVar')
-const server = require('./server')
-const healthEndpoint = require('./rest/routes/heath')
-const articleEndpoint = require('./rest/routes/articles')
-const routes = require('./rest/index')
-const mongodb = require('./repositories/mongodb')
-const articleSchema = require('./models/articleSchema')
-const articlevalidation = require('./rest/routes/utils/articleValidation')
-// const logger = require('./utils/logger');
+// External Dependencies
+const express = require('express');
+const getenv = require('getenv');
+const morgan = require('morgan');
+const winston = require('winston');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
-const container = createContainer()
+// Internal Files
+const server = require('./server');
+const healthEndpoint = require('./rest/routes/heath');
+const articleEndpoint = require('./rest/routes/articles');
+const routes = require('./rest/index');
+const mongodb = require('./repositories/mongodb');
+const articleSchema = require('./models/articleSchema');
+const articleValidation = require('./rest/routes/utils/articleValidation');
+const middleware = require('./middleware/index');
 
-// get env variables
-let envVariables
+const container = createContainer();
+
+let envVariables;
 
 try {
-  envVariables = {
-    // if PORT isn't avlaible defaults to 3000`
-    PORT: getEnvVar('PORT', 3000),
-    USER_PASSWORD: getEnvVar('USER_PASSWORD')
+  envVariables = getenv.multi({
+    PORT: ['PORT', 3000],
+    USER_PASSWORD: ['USER_PASSWORD'],
+  });
+  if (!envVariables.USER_PASSWORD) {
+    // TODO isValid method and throw new TypeError
+    throw new Error('A use password must be set to use this service');
   }
-} catch (err) {
-  console.log('A fatel error occured while fetching env variables:', err)
-  process.exit(1)
+} catch (error) {
+  winston.error(error, 'Error while loading environment variables');
+  process.exit(1);
 }
 
-// mongo database specific dependencies
+// External Libraries
+container.register({
+  app: asFunction(express).singleton(),
+  morgan: asValue(morgan),
+  logger: asValue(winston),
+  bodyParser: asValue(bodyParser),
+});
+
+// Mongo Database
 container.register({
   mongoose: asFunction(() => mongoose).singleton(),
   mongodb: asFunction(mongodb).singleton(),
-  articleSchema: asFunction(articleSchema).singleton()
-})
+  articleSchema: asFunction(articleSchema).singleton(),
+});
 
-// external dependencies
+// Config
 container.register({
-  app: asFunction(app).singleton(),
-  morgan: asValue(morgan),
-  logger: asValue(winston),
-  promisify: asValue(promisify),
-  bodyParser: asValue(bodyParser),
-  sanitise: asFunction(() => sanitise)
-  // helmet: asValue(helmet),
-  // cors: asValue(cors),
-})
+  envVariables: asValue(envVariables),
+});
 
-// application files
+// Rest
 container.register({
   healthEndpoint: asFunction(healthEndpoint),
   envVariables: asValue(envVariables),
   articleEndpoint: asFunction(articleEndpoint),
-  server: asFunction(server).singleton(),
+  middleware: asFunction(middleware).singleton(),
   routes: asFunction(routes),
-  articlevalidation: asFunction(articlevalidation)
-})
+  server: asFunction(server).singleton(),
+});
 
-module.exports = container.cradle
+// Utils
+container.register({
+  articleValidation: asFunction(articleValidation),
+});
+
+module.exports = container.cradle;

@@ -1,9 +1,8 @@
 ## To Run
 
-`npm run start`
+Run `mongod` on a separate terminal window.
 
-must be running mongod locally
-TODO: dockarise the app and mongo
+`npm run start`
 
 ## To Test
 
@@ -11,6 +10,8 @@ TODO: dockarise the app and mongo
 `npm run test:unit:watch`
 
 ## Configuration
+
+The USER_PASSWORD can be set to whatever you want. This is the password which is checked when a request is made to the service to post an article. So this is the password which you must pass in the header of the post request.
 
 All configuration is done using environment variables, the following are required:
 
@@ -32,7 +33,7 @@ POST
 
 - http://localhost:3000/api/postArticles?title=test%title
   example body for this post request: {"title": "Test title", "author": "Abi", "articleBody": "Test desc"}
-  ...in body make sure selected raw input and JSON formatt...
+  ...in body make sure selected raw input and JSON formats...
 
 DELETE
 
@@ -53,7 +54,7 @@ For testing: https://scotch.io/tutorials/how-to-test-nodejs-apps-using-mocha-cha
 
 # TODO
 
-done
+TODO: dockarise the app and mongo
 
 - replace mongoose with native driver
 - put end point
