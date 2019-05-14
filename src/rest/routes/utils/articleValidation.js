@@ -1,6 +1,6 @@
 module.exports = ({ envVariables }) => {
   return {
-    // TODO validation to check title is unique
+    
     isValid: bodyOfRequest => {
       try {
         if (

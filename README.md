@@ -27,13 +27,15 @@ GET
 - http://localhost:3000/api/liveness
 - http://localhost:3000/private/readiness
 - http://localhost:3000/private/liveness
-- http://localhost:3000/api/getArticles
+- http://localhost:3000/api/getAllArticles
+- http://localhost:3000/api/getArticle?id=5c6ee5adb0d1d8168805d502
 
 POST
 
-- http://localhost:3000/api/postArticles?title=test%title
+- http://localhost:3000/api/postArticles
   example body for this post request: {"title": "Test title", "author": "Abi", "articleBody": "Test desc"}
   ...in body make sure selected raw input and JSON formats...
+In header set a key: password with the value of the env variable that you set with USER_PASSWORD.
 
 DELETE
 
