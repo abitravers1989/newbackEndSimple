@@ -1,18 +1,9 @@
 const request = require('supertest');
-const {
-  server
-} = require('../../src/container');
-
-const app = server.start();
-
-after(async () => {
-  await server.stop();
-});
 
 describe('health endpoints', () => {
   describe(`GET /readiness`, () => {
     it('returns a 200 when server has started', () => {
-      request(app)
+      return request(global.app)
         .get(`/api/readiness`)
         .expect(200)
         .expect('Content-Type', /json/)
@@ -24,7 +15,7 @@ describe('health endpoints', () => {
 
   describe(`GET /liveness`, () => {
     it('returns a 200 when server has started', () => {
-      request(app)
+      return request(global.app)
         .get(`/api/liveness`)
         .expect(200)
         .expect('Content-Type', /json/)
