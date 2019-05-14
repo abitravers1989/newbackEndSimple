@@ -6,6 +6,7 @@ module.exports = ({
   middleware,
   mongodb,
   articleSchema,
+  promisify,
 }) => {
   let server;
 
@@ -14,7 +15,7 @@ module.exports = ({
       try {
         middleware.init();
         routes.setupEndpoints(app);
-        
+
         // Database setup
         mongodb.connect();
         articleSchema.createArticleSchema();
@@ -29,10 +30,13 @@ module.exports = ({
       }
       return server;
     },
-    stop: () => {
+    stop: async () => {
       try {
-        server.close();
+        await promisify(server.close).call(server);
         logger.info('Shutting down the service gracefully');
+        setTimeout(() => {
+          process.exit(0)
+        },1000);
       } catch (error) {
         logger.error(error, 'Forcing server to shut down');
         process.exit(1);

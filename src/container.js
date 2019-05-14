@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const winston = require('winston');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const { promisify } = require('util');
 
 // Internal Files
 const server = require('./server');
@@ -42,6 +43,7 @@ container.register({
   morgan: asValue(morgan),
   logger: asValue(winston),
   bodyParser: asValue(bodyParser),
+  promisify: asValue(promisify),
 });
 
 // Mongo Database
