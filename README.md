@@ -18,9 +18,18 @@ To run this locally please create a .env in the route of this directory with the
 
 ## To Run
 
-Run `mongod` on a separate terminal window.
+On a separate terminal window run:
 
-`npm run start`
+```
+$ mongod
+```
+
+Then run:
+
+```
+$ npm run start
+```
+
 
 ## Testing
 
@@ -113,7 +122,7 @@ PUT
 - http://localhost:3000/api/editArticle?title=Test 3
 
 
-# TODO
+## TODO
 
 - Add password to delete endpoints.
 - Dockarise the app and mongo. Use this to mock mongo in integration tests.
