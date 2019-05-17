@@ -2,9 +2,9 @@ const request = require('supertest');
 const mongoDbHelper = require('../integration/utils/mongodb');
 
 describe('health endpoints', () => {
-  afterEach(() => {
-    mongoDbHelper.clearDb();
-  });
+  // afterEach(() => {
+  //   mongoDbHelper.clearDb();
+  // });
   describe(`GET /readiness`, () => {
     describe('when there are articles in the database', () => {
       before(() => {

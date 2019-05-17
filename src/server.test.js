@@ -1,7 +1,6 @@
 const serverFactory = require('./server');
-const { promisify } = require('util');
 
-describe.only('server', () => {
+describe('server', () => {
   const sandbox = sinon.createSandbox();
 
   const dependencies = {
@@ -24,7 +23,6 @@ describe.only('server', () => {
     mongodb: {
       connect: () => {},
     },
-    promisify,
     articleSchema: {
       createArticleSchema: () => {},
     },
@@ -97,8 +95,11 @@ describe.only('server', () => {
         app.listen.returns(mockExpress);
         server.start();
         await server.stop();
-        expect(mockExpress.close).to.have.been.called;
-        expect(logger.info).to.have.been.called;
+        setTimeout(() => {
+          expect(mockExpress.close).to.have.been.called;
+          expect(logger.info).to.have.been.called;
+          expect(process.exit).to.have.been.calledWith(0);
+        }, 5050)
       });
 
       describe('when the server cannot be closed successfully', () => {

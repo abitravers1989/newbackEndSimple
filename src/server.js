@@ -6,7 +6,6 @@ module.exports = ({
   middleware,
   mongodb,
   articleSchema,
-  promisify,
 }) => {
   let server;
 
@@ -32,7 +31,7 @@ module.exports = ({
     },
     stop: async () => {
       try {
-        await promisify(server.close).call(server);
+        server.close();
         logger.info('Shutting down the service gracefully');
         setTimeout(() => {
           process.exit(0)

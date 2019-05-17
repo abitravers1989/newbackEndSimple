@@ -7,7 +7,6 @@ const morgan = require('morgan');
 const winston = require('winston');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const { promisify } = require('util');
 
 // Internal Files
 const server = require('./server');
@@ -27,6 +26,7 @@ try {
   envVariables = getenv.multi({
     PORT: ['PORT', 3000],
     USER_PASSWORD: ['USER_PASSWORD'],
+    CONNECTION_STRING: ['CONNECTION_STRING'],
   });
   if (!envVariables.USER_PASSWORD) {
     // TODO isValid method and throw new TypeError
@@ -43,7 +43,6 @@ container.register({
   morgan: asValue(morgan),
   logger: asValue(winston),
   bodyParser: asValue(bodyParser),
-  promisify: asValue(promisify),
 });
 
 // Mongo Database
