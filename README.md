@@ -12,7 +12,8 @@ All configuration is done using environment variables, the following are require
 
 - **PORT** - Port to run the server on. Defaults to 3000. _Optional_
 - **USER_PASSWORD** -  The password which is used to grant POST or PUT requests permission to sent articles to this service. This password can be anything. It must be passed in the header of POST, PUT or DELETE requests with the key 'password'. 
--  **CONNECTION_STRING** - The string needed to connect to your local mongo database. This should include the extension to the database which you have decided to store these blog articles in, for example a 'blog' database.
+- **CONNECTION_STRING** - The string needed to connect to your local mongo database. This should include the extension to the database which you have decided to store these blog articles in, for example a 'blog' database.
+- **TEST_CONNECTION_STRING** - Test database url string. As above but for the test database.
 
 To run this locally please create a .env in the route of this directory with the above in. See the .env.example.
 

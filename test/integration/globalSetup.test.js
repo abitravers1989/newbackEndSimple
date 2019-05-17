@@ -1,6 +1,7 @@
-const { server } = require('../../src/container');
+const { server, envVariables } = require('../../src/container');
 
 before(async () => {
+  envVariables.NODE_ENV = 'test'
   global.app = await server.start();
 });
 
