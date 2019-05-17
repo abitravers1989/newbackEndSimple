@@ -27,10 +27,11 @@ try {
     PORT: ['PORT', 3000],
     USER_PASSWORD: ['USER_PASSWORD'],
     CONNECTION_STRING: ['CONNECTION_STRING'],
+    TEST_CONNECTION_STRING: ['TEST_CONNECTION_STRING'],
+    NODE_ENV: ['NODE_ENV'],
   });
   if (!envVariables.USER_PASSWORD) {
-    // TODO isValid method and throw new TypeError
-    throw new Error('A use password must be set to use this service');
+    throw new Error('A user password must be set to use this service');
   }
 } catch (error) {
   winston.error(error, 'Error while loading environment variables');

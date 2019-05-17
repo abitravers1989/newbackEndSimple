@@ -1,4 +1,4 @@
-const { mongoose } = require('../../../src/container');
+const { mongoose, articleSchema} = require('../../../src/container');
 
 module.exports = {
   createArticles: (article) => {
@@ -20,19 +20,27 @@ module.exports = {
       console.log('Deleted Articles');
     });
   },
+  getArticleID: (articleTitle) => {
+    const Article = mongoose.model('Article');
+    return Article.find({'title': articleTitle}, (err, article) => {
+      console.log('----->article', article)
+      return article
+    })
+  }
   // getAllArticles: async () => {
   //   const Article = mongoose.model('Article');
-  //   let articleArray = [];
+  //   let returnedArticles;
   //   // return (
   //     Article.find()
   //       .then((articles) => {
-  //         articleArray.push(articles)
-  //         return articleArray;
-  //         //console.log('----->', articles);
+  //         console.log('----->', articles);
+  //         returnedArticles = articles;
+ 
   //       })
   //       .catch((err) => {
   //         console.log('There was an error:', err);
   //       })
+  //   return returnedArticles;
   //   // );
   // }
 };
