@@ -125,7 +125,8 @@ PUT
 ## TODO
 
 - Add password to delete endpoints.
-- Dockarise the app and mongo. Use this to mock mongo in integration tests.
+- Dockarise the app and mongo. 
+- Create a new mongodb to be used for testing. 
 - Add further tests.
 - Fix PUT endpoint.
 - Make sure all console logs are replaced with logger.

@@ -1,7 +1,7 @@
-const { mongodb, mongoose } = require('../../../src/container');
+const { mongoose } = require('../../../src/container');
 
 module.exports = {
-  createArticles: article => {
+  createArticles: (article) => {
     const Article = mongoose.model('Article');
     const { title, articleBody, author } = article;
     const newArticleData = new Article({ title, articleBody, author });
@@ -13,11 +13,26 @@ module.exports = {
   },
   clearDb: () => {
     const Article = mongoose.model('Article');
-    Article.remove({}, err => {
+    Article.remove({}, (err) => {
       if (err) {
         throw new Error('Error deleting all the articles', err);
       }
       console.log('Deleted Articles');
     });
   },
+  // getAllArticles: async () => {
+  //   const Article = mongoose.model('Article');
+  //   let articleArray = [];
+  //   // return (
+  //     Article.find()
+  //       .then((articles) => {
+  //         articleArray.push(articles)
+  //         return articleArray;
+  //         //console.log('----->', articles);
+  //       })
+  //       .catch((err) => {
+  //         console.log('There was an error:', err);
+  //       })
+  //   // );
+  // }
 };
