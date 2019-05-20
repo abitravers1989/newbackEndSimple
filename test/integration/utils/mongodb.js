@@ -1,4 +1,4 @@
-const { mongoose, articleSchema} = require('../../../src/container');
+const { mongoose, articleSchema } = require('../../../src/container');
 
 module.exports = {
   createArticles: (article) => {
@@ -20,11 +20,22 @@ module.exports = {
       console.log('Deleted Articles');
     });
   },
-  getArticleID: (articleTitle) => {
+  getArticleID: (articleTitle, callback) => {
     const Article = mongoose.model('Article');
-    return Article.find({'title': articleTitle}, (err, article) => {
-      console.log('----->article', article)
-      return article
+    Article.find().where("title", articleTitle).exec((err, article) => {
+      callback(err, article)
+    });
+    // return new Promise((resolve, reject)=> {
+    //   Article.find({'title': articleTitle})
+    //     .then((article) => {
+    //       resolve
+    //     })
+      // .toArray((err, article) => {
+      //   if(err) {
+      //     return reject(err)
+      //   }
+      //   return resolve(article[0])
+      // })
     })
   }
   // getAllArticles: async () => {
